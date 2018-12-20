@@ -1,0 +1,576 @@
+.colorSettings{
+
+/************************************************** THEMES **************************************************/  
+
+  --cor-letra: rgb(0, 0, 0);
+  --cor-letra-disable: #000000;
+  --background: #e1e6e6;
+  --filtro-lines: rgb(88, 85, 85);
+  --header-background: #004136;
+  --modal-header-background: #e1e6e6;
+  --modal-header-font: #004136; 
+  --navbar-background: rgb(7, 6, 6);
+  --navbar-font: #e1e6e6;
+  --header-lines: #d4fad6;
+  --header-font: #e1e6e6; 
+  --navBar-font: rgb(148, 148, 148);
+  --navBar-font-selected: #e1e6e6;
+  --navBar-background: rgb(48, 46, 46);
+  --navBar-background-selected: black;
+  --navBar-border: rgb(121, 121, 121);
+  --navBar-detailed-background: rgb(199, 192, 192);
+  --navBar-detailed-font: rgb(48, 46, 46);
+  --button-background: #004136;
+  --modal-background: #004136;
+  --modal-button-background: #e1e6e6;
+  --modal-button-font: #004136;
+  --modal-font: #e1e6e6;
+  --button-font: #e1e6e6;
+
+/************************************************************************************************************/  
+
+
+}
+
+.ModalShow {
+  display: block;  
+}
+
+.ModalHide {
+  display: none;
+}
+
+
+@media only screen and (min-width: 900px) {
+  .buttonHome {
+    background-color: transparent;
+    border-radius: 10px;
+    align-content: center;
+    text-align: center;
+    width: 5vw;
+    height: auto;
+    border: none;
+    padding: 3px;
+    z-index: 30;
+  }
+
+  .buttonHomeDiv {
+    background-color: transparent;
+    border-radius: 10px;
+    align-content: center;
+    text-align: center;
+    margin-left: 10px;
+    border: none;
+    padding: 3px;
+    z-index: 30;
+  }
+
+  .buttonsHome {
+    margin-top: 10px;
+    height: auto;
+    width: auto;
+    text-align: left;
+    margin-bottom: 10px;
+  }
+
+  .logoHome {
+    height: auto; 
+    margin-left: 5vw; 
+    display: block; 
+    width: 90vw; 
+    position: absolute;
+    padding-bottom: 30px;
+  }
+
+}
+
+.Modal{
+  background-color:rgba(0, 0, 0, 0.5);
+  color: rgba(0, 0, 0, 0.5);
+  /* overflow-y: scroll; */
+}
+
+.Modal:before{
+  content: '';
+  display: inline-block;
+  height: 20%;
+  vertical-align: top;
+  margin-right: -0.25em; /* Adjusts for spacing */
+}
+
+
+
+
+.ModalBg{ 
+  background: var(--modal-background);
+  color: var(--modal-font);
+  border: 1px solid var(--modal-background);
+  /* border: 1px red solid; */
+  padding: 0px;
+
+}
+
+.ModalButton {
+  background-color: var(--modal-button-background);
+  color: var(--modal-button-font);
+  font-weight: bold;
+  border-radius: 10px;
+  text-align: center;
+  width: 25%;
+  margin-left: 10px;
+  border: none;
+  padding: 3px;
+}
+
+.ModalBody{
+  /* background-color: var(--cor-fundo); */
+  z-index: 1500;
+  margin-left: 10%;
+  margin-bottom: 10px;
+  width: 80%;
+  height: auto;
+  text-align: center;
+}
+
+
+.ModalHeader{
+  /* background-color: var(--cor-fundo); */
+  z-index: 1500;
+  margin-left: 10%;
+  width: 80%;
+  height: auto;
+  text-align: center;
+}
+
+.ModalFooter{
+  /* background-color: var(--cor-fundo); */
+  z-index: 1500;
+  margin-left: 10%;
+  width: 80%;
+  height: auto;
+  margin-top: 10px;
+  margin-bottom: 10px;
+  text-align: right;
+}
+
+
+.buttonsCadastro{
+  text-align: right;
+}
+
+
+@media only screen and (max-width: 900px) {
+  .buttonHome {
+    background-color: transparent;
+    border-radius: 10px;
+    align-content: center;
+    text-align: center;
+    width: auto;
+    width: auto;
+    height: 10vh;
+    margin-left: 10px;
+    border: none;
+    padding: 3px;
+    z-index: 30;
+  }
+
+  .buttonHomeDiv {
+    background-color: transparent;
+    border-radius: 10px;
+    align-content: center;
+    text-align: center;
+    margin-left: 10px;
+    border: none;
+    padding: 3px;
+    z-index: 30;
+  }
+
+  .buttonsHome {
+    margin-top: 10px;
+    height: auto;
+    text-align: left;
+    margin-bottom: 10px;
+  }
+
+  .logoHome {
+    height: auto; 
+    padding-top: 50vh;
+    margin-left: 5vw; 
+    display: block; 
+    width: 90vw; 
+    padding-bottom: 30px;
+  }
+
+}
+
+.iconApergs{
+  width: 20px;
+  height: 20px;
+  margin-right: 5px;
+  fill: white;
+}
+
+.boxTela {
+  height: auto;
+  -webkit-touch-callout: none;
+  margin: 0;
+  width: auto;
+  background-color: var(--background);
+  font-family: 'Titillium Web', sans-serif;
+  color: var(--cor-letra);
+  /* display: content; */
+  border: 1px transparent solid
+}
+
+.boxFiltros {
+  /* height: 30vh; */
+  margin-left: 30px;
+  margin-right: 30px;
+  display: block;
+
+  /* border: 1px dashed black; */
+
+}
+
+.filtros {
+  border-radius: 10px;
+  border: 1px solid var(--filtro-lines);
+  padding: 5px;
+}
+
+.filtros:after {
+  content: "";
+  display: table;
+  clear: both;
+}
+
+.itemFiltro {
+  display: inline-block;
+  margin-left: 5px;
+  margin-top: 0px;
+  margin-bottom: 5px;
+  margin-right: 5px;
+  font-size: 0.95em;
+}
+
+.inputFiltro {
+  padding: 3px;
+  margin-left: 0px;
+  height: 25px;
+  vertical-align: middle;
+  line-height: 200%;
+  margin-top: 0px;
+  border-radius: 5px;
+  border: none;
+  color: var(--cor-letra);
+  outline: none;
+  border: 1px solid rgba(0, 0, 0, 0.26);
+  font-size: 1em;
+  padding: 2px;
+}
+
+.selectFiltro {
+  margin-left: 0px;
+  height: 25px;
+  vertical-align: middle;
+  line-height: 200%;
+  border-radius: 5px;
+  border: none;
+  color: var(--cor-letra);
+  outline: none;
+  border: 1px solid rgba(0, 0, 0, 0.26);
+  font-size: 1em;
+  padding: 2px;
+}
+
+.labelFiltro {
+  display: block;
+  font-size: .9em;
+  color: var(--cor-letra);
+}
+
+.labelModal {
+  display: block;
+  font-size: .9em;
+  color: var(--modal-font);
+  text-align: left;
+  margin-top: 10px;
+}
+
+input[type=radio] {
+  margin-left: 10px;
+  width: 20px;
+  height: 15px;
+  text-align: center;
+  align-self: center;
+  vertical-align: center;
+}
+
+input[type=checkbox] {
+  margin-left: 10px;
+  width: 20px;
+  height: 15px;
+  text-align: center;
+  align-self: center;
+  vertical-align: center;
+}
+
+.buttonFiltroProcessar {
+  background-color: var(--button-background);
+  color: var(--button-font);
+  border-radius: 10px;
+  width: 150px;
+  margin-left: 10px;
+  border: none;
+  left: calc(100vw - 145px);
+  padding: 3px;
+  display:block;
+}
+
+.buttonDetail {
+  background-color: var(--button-background);
+  color: var(--button-font);
+  border-radius: 10px;
+  vertical-align: center;
+  text-align: center;
+  width: 10%;
+  margin-left: 10px;
+  border: none;
+  padding: 3px;
+}
+
+.buttonDetailColumn {
+  background-color: var(--button-background);
+  color: var(--button-font);
+  border-radius: 10px;
+  vertical-align: center;
+  text-align: center;
+  width: 40%;
+  margin-left: 10px;
+  border: none;
+  padding: 3px;
+}
+
+.checkModal {
+  margin: 0 0 0 0;
+  width: 100%;
+  text-align: left;
+}
+
+
+.buttonNovo {
+  background-color: var(--button-background);
+  color: var(--button-font);
+  border-radius: 10px;
+  margin-top: 5px;
+  /* text-align: center; */
+  width: 150px;
+  margin-left: 10px;
+  /* margin-bottom: 20px; */
+  border: none;
+  padding: 3px;
+  display:block;
+}
+
+.buttonSalvar {
+  background-color: var(--button-background);
+  color: var(--button-font);
+  border-radius: 10px;
+  text-align: center;
+  width: 100px;
+  border: none;
+  padding: 3px;
+}
+
+.buttonVoltar {
+  background-color: var(--button-background);
+  color: var(--button-font);
+  border-radius: 10px;
+  text-align: center;
+  margin-left: 30px;
+  width: 100px;
+  border: none;
+  padding: 3px;
+}
+
+.buttonsDetail {
+  margin-top: 10px;
+  text-align: center;
+  margin-bottom: 10px;
+}
+
+.buttonsDetailColumn {
+  text-align: center;
+}
+
+.buttonFiltroLimpar {
+  background-color: var(--button-background);
+  color: var(--button-font);
+  border-radius: 10px;
+  border: none;
+  margin-left: 10px;
+  width: 150px;
+  padding: 3px;
+  margin-top: 5px;
+  display:block;
+}
+
+.boxTabela {
+  margin-left: 30px;
+  margin-right: 30px;
+  margin-top: 30px;
+  margin-bottom: 30px;
+  min-height: 100vh;
+  display:block;
+  z-index: 10;
+
+  /* height: 50vh; */
+  /* border: 2px dashed black */
+}
+
+.boxNavBar {
+  height: 5vh;
+  display:block;
+}
+
+.themeNavBar {
+  color: var(--navBar-font);
+  width: 100%;
+  height: 30px;
+  background-color: var(--navBar-background);
+  border-bottom: 2px solid var(--navBar-border);
+}
+
+.secondItemNavBar {
+  color: var(--navBar-detailed-font);
+}
+
+.secondItemNavBar:hover {
+  color: white;
+  text-decoration: none;
+}
+
+.themeDetailNavBar {
+  background-color: var(--navBar-detailed-background);
+  white-space: nowrap;
+  padding: 5px 10px 10px 10px;
+  border: 2px solid var(--navBar-border)
+}
+
+.firstItemNavBar {
+  color: var(--navBar-font);
+  width: 150px;
+  height: 30px;
+  text-align: center;
+  text-align: center;
+  vertical-align: middle;
+  line-height: 200%;
+  display: inline-block;
+}
+
+.firstItemNavBar:hover {
+  color: white;
+  text-decoration: none;
+  background-color: var(--navBar-background-selected);
+  border-bottom: 2px solid var(--navBar-border);
+  
+}
+
+.firstItemNavBar:active {
+  color: white;
+  text-decoration: none;
+  background-color: var(--navBar-background-selected);
+  
+}
+
+.logOutNavBar {
+  color: var(--navBar-font);
+  position: absolute;
+  right: 0px;
+  width: 100px;
+  height: 30px;
+  text-align: center;
+  vertical-align: middle;
+  line-height: 200%;
+  display: inline-block;
+  border-left: 2px solid var(--navBar-border);
+}
+
+.logOutNavBar:hover {
+  color: white;
+  text-decoration: none;
+  background-color: var(--navBar-background-selected);
+  border-left: 2px solid var(--navBar-border);
+  border-bottom: 2px solid var(--navBar-border);
+}
+
+.headItemNavBar {
+  color: var(--navBar-font);
+  width: 200px;
+  height: 30px;
+  text-align: center;
+  vertical-align: middle;
+  line-height: 200%;
+  display: inline-block;
+  border-right: 2px solid var(--navBar-border);
+}
+
+.headItemNavBar:hover {
+  color: white;
+  text-decoration: none;
+  background-color: var(--navBar-background-selected);
+  border-right: 2px solid var(--navBar-border);
+  border-bottom: 2px solid var(--navBar-border);
+}
+
+.boxHeader {
+  margin-top: 30px;
+  display:block;
+}
+
+.headerCadastro {
+  text-align: center;
+  padding: 5px;
+  border-radius: 10px;
+  background-color: var(--header-background);
+  color: var(--header-font);
+  margin-left: 30px;
+  margin-right: 30px;
+}
+
+.headerModal {
+  text-align: center;
+  border-radius: 10px;
+  font-weight: bold;
+  margin-top: 20px;
+  background-color: var(--modal-header-background);
+  color: var(--modal-header-font);
+}
+
+
+
+button:hover {
+  box-shadow: 0 6px 8px 0 rgba(0,0,0,0.24), 0 8px 25px 0 rgba(0,0,0,0.19);
+}
+
+.column-filter {
+  float: left;
+  width: 80%;
+}
+
+@media only screen and (min-width: 900px) {
+  .column-filter-2 {
+    margin-top: -15px;
+    margin-right: 5px;
+    float: right;
+    text-align: center;
+  }
+}
+
+@media only screen and (max-width: 900px) {
+  .column-filter-2 {
+    margin-top: -15px;
+    float: center;
+    text-align: center;
+  }
+}
