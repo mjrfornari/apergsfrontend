@@ -1,8 +1,9 @@
 export const config = {
-    protocol: 'http',
-    server : 'localhost',
+    protocol: 'https',
+    server : 'delphusback.herokuapp.com',
     port: 3000,
-    portBackend: 3001,
+    portBackend: 443,
+    frontend: 'http://localhost.com:3000'
 }
 
 export default config;
