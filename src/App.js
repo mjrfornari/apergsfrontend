@@ -10,6 +10,7 @@ import Cidades from './pages/Cidades'
 import Estados from './pages/Estados'
 import Paises from './pages/Paises'
 import Parametros from './pages/Parametros'
+import Situacoes from './pages/Situacoes'
 import Home from './pages/Home'
 
 class App extends Component {
@@ -34,6 +35,8 @@ class App extends Component {
                 <Route exact path="/paises" component={Paises}>
                 </Route>
                 <Route exact path="/parametros" component={Parametros}>
+                </Route>
+                <Route exact path="/situacoes" component={Situacoes}>
                 </Route>
                 <Route component={Home}>
                 </Route>

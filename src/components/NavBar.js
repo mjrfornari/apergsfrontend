@@ -92,7 +92,7 @@ class NavBar extends Component {
                                 <MenuItem divider />
                                 <p style={{fontWeight: "bold", textDecoration: "underline", textAlign: "left", marginLeft: "20px"}}>Associação</p>
                                     <MenuItem eventKey={1.1} href="/associados">Associados</MenuItem>
-                                    <MenuItem eventKey={1.2} href="/situacoes" disabled>Situações</MenuItem>
+                                    <MenuItem eventKey={1.2} href="/situacoes">Situações</MenuItem>
                                     <MenuItem eventKey={1.3} href="/lotacoes" disabled>Lotações</MenuItem>
                                     <MenuItem eventKey={1.4} href="/categorias-associados" disabled>Categorias de Associados</MenuItem>
                                     <MenuItem eventKey={1.5} href="/tipos-dependentes" disabled>Tipos de dependentes</MenuItem>

@@ -10,6 +10,10 @@
   --table-button-font: #e1e6e6;
   --table-button-background: #01352c;
   --table-options-background: #004136;
+  --table-headers-background: #e1e6e6;
+  --table-headers-borders: #004136;
+  --table-ordermark: #e1e6e6;
+  --table-headers-font: #004136;
   --table-lines: #ffffff;
   --filtro-lines: #004136;
   --header-background: #004136;
@@ -44,6 +48,9 @@
   --autocomplete-border-inModal: #e1e6e6;
   --autocomplete-selected-font-inModal: #e1e6e6;
   --autocomplete-font-inModal: rgb(0, 0, 0);
+
+
+  --lines: 2px;
 
 /************************************************************************************************************/  
 
@@ -146,7 +153,7 @@
     user-select: none;
     border-radius: 5px;
     background-color: var(--autocomplete-background);
-    border: solid var(--autocomplete-border) 4px;
+    border: solid var(--autocomplete-border) var(--lines);
     color: var(--cor-letra);
     height: 150px;
     outline: none;
@@ -178,9 +185,19 @@
     width: 100%
 }
 
+button {
+  transition: 300ms all !important;
+}
+
+a {
+  transition: 300ms all !important;
+}
+
+
 
 @media only screen and (min-width: 900px) {
   .buttonHome {
+    /*  */
     background-color: transparent;
     border-radius: 10px;
     align-content: center;
@@ -193,6 +210,7 @@
   }
 
   .buttonHomeDiv {
+    /* transition: 300ms background; */
     background-color: transparent;
     border-radius: 10px;
     align-content: center;
@@ -314,6 +332,7 @@
   }
 
   .buttonHomeDiv {
+    /* transition: 300ms all; */
     background-color: transparent;
     border-radius: 10px;
     align-content: center;
@@ -383,7 +402,7 @@
 
 .filtros {
   border-radius: 10px;
-  border: 4px solid var(--filtro-lines);
+  border: var(--lines) solid var(--filtro-lines);
   padding: 5px;
 }
 
@@ -414,7 +433,7 @@
   border: none;
   color: var(--cor-letra);
   outline: none;
-  border: 4px solid var(--filtro-lines);
+  border: var(--lines) solid var(--filtro-lines);
   font-size: 1em;
   padding: 2px;
 }
@@ -428,7 +447,7 @@
   border: none;
   color: var(--cor-letra);
   outline: none;
-  border: 4px solid var(--filtro-lines);
+  border: var(--lines) solid var(--filtro-lines);
   font-size: 1em;
   padding: 2px;
 }
@@ -474,7 +493,7 @@
   padding-right: 30px;
   padding-bottom: 30px;
   border-radius: 0 10px 10px 10px;
-  border: 4px solid var(--filtro-lines);
+  border: var(--lines) solid var(--filtro-lines);
 }
 
 .form-control {
@@ -487,7 +506,7 @@
   border: none;
   color: var(--cor-letra);
   outline: none;
-  border: 4px solid var(--filtro-lines);
+  border: var(--lines) solid var(--filtro-lines);
   font-size: 1em;
   padding: 2px;
 }
@@ -537,6 +556,7 @@ input[type=checkbox] {
   align-self: center;
   vertical-align: center;
 }
+
 
 .buttonFiltroProcessar {
   background-color: var(--button-background);

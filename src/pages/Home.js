@@ -24,8 +24,8 @@ class Home extends Component {
                     <div style={{minHeight: '80vh'}}>
                         <div style={{ width: '80vw', marginLeft: '30px', marginRight: '30px'}}>
                             <div className="buttonsHome">
-                                <LinkContainer className="buttonHomeDiv" to="associados">
-                                    <button >
+                                <LinkContainer to="associados">
+                                    <button className="buttonHomeDiv">
                                         <img alt="Associados" src={require('../imgs/associados.png')} className="buttonHome" title="Associados"/>
                                         <br/>
                                         Associados
