@@ -31,7 +31,7 @@ const inputParsers = {
 };
 
 
-class Situacoes extends Component {
+class Bancos extends Component {
     constructor(props, context) {
         super(props, context);
         this.state = {
@@ -73,19 +73,19 @@ class Situacoes extends Component {
         if (Number(codigo) > 0) {
             edicao = true
             pk = codigo
-            await fetch(config.protocol+'://'+config.server+':'+config.portBackend+'/api/getSituacoes?pk='+(Number(codigo)).toString()).then(r => r.json()).then(async r => {
+            await fetch(config.protocol+'://'+config.server+':'+config.portBackend+'/api/getBancos?pk='+(Number(codigo)).toString()).then(r => r.json()).then(async r => {
             // await fetch(config.backend+'/getCelulares?pk='+(Number(e.target.id)).toString()).then(r => r.json()).then(async r => {
                 if (typeof r[0] === 'undefined') {
-                    window.location.href = '/situacoes'
+                    window.location.href = '/bancos'
                 } else {
-                    let form = document.getElementById('registroSituacoes');
+                    let form = document.getElementById('registroBancos');
                     console.log(r[0])
                     await populateForm(form, r[0])
                 }  
             })
         } else {
             edicao = false
-            document.getElementById("registroSituacoes").reset();
+            document.getElementById("registroBancos").reset();
         }
         this.setState({ modal: { show: true }, edit: edicao, codigo: pk })
     }
@@ -112,7 +112,7 @@ class Situacoes extends Component {
     submitData(e) {
         e.preventDefault();
         //Pega valores do form
-        const form = document.getElementById('registroSituacoes');
+        const form = document.getElementById('registroBancos');
         const data = new FormData(form);
 
         //Trata valores conforme data-parse dos inputs
@@ -142,7 +142,7 @@ class Situacoes extends Component {
         if (this.state.edit) {
             //Editar
             console.log(json)
-            fetch(config.protocol+'://'+config.server+':'+config.portBackend+'/api/editSituacoes?pk='+this.state.codigo, {
+            fetch(config.protocol+'://'+config.server+':'+config.portBackend+'/api/editBancos?pk='+this.state.codigo, {
                 method: 'POST',
                 headers: {
                     'Content-type': 'application/json'
@@ -162,7 +162,7 @@ class Situacoes extends Component {
             })
         } else {
             //Inserir
-            fetch(config.protocol+'://'+config.server+':'+config.portBackend+'/api/novoSituacoes', {
+            fetch(config.protocol+'://'+config.server+':'+config.portBackend+'/api/novoBancos', {
                 method: 'POST',
                 headers: {
                     'Content-type': 'application/json'
@@ -189,7 +189,7 @@ class Situacoes extends Component {
         //Carregar Parâmetros de pesquisa
         let query = {}
         query.filtered = getParameterByName('filtered')
-        query.descricao = getParameterByName('descricao')
+        query.nome = getParameterByName('nome')
 
 
         this.setState({
@@ -212,7 +212,7 @@ class Situacoes extends Component {
         }).then((result) => {
             if (result) {
                 //Delete
-                fetch(config.protocol+'://'+config.server+':'+config.portBackend+'/api/deleteSituacoes?pk='+pk, {
+                fetch(config.protocol+'://'+config.server+':'+config.portBackend+'/api/deleteBancos?pk='+pk, {
                     method: 'POST',
                     headers: {
                         'Content-type': 'application/json'
@@ -253,7 +253,7 @@ class Situacoes extends Component {
         //Limpa o filtro
         e.preventDefault()
         console.log('limpa')
-        window.history.replaceState({filtered: false}, 'filter', "/situacoes") //Apaga QueryURL
+        window.history.replaceState({filtered: false}, 'filter', "/bancos") //Apaga QueryURL
         this.setState({filter: []}) 
     }
 
@@ -276,23 +276,23 @@ class Situacoes extends Component {
             let filtered = await data.filter((item) => {
                 let queryString = '?' 
 
-                //Filtro: Descricao
-                let descricao = (item.descricao || '').includes((filter.descricao || '').toUpperCase())
-                if (filter.descricao) {
+                //Filtro: Nome
+                let nome = (item.nome || '').includes((filter.nome || '').toUpperCase())
+                if (filter.nome) {
                     if (queryString === '?') {
-                        queryString = queryString + 'descricao=' + filter.descricao
-                    } else queryString = queryString + '&descricao=' + filter.descricao
+                        queryString = queryString + 'nome=' + filter.nome
+                    } else queryString = queryString + '&nome=' + filter.nome
                 }
 
                 //Monta Query URL
                 if (queryString !== '?') {
-                    window.history.replaceState({filtered: true}, 'filter', "/situacoes"+queryString+"&filtered=true")
+                    window.history.replaceState({filtered: true}, 'filter', "/bancos"+queryString+"&filtered=true")
                 } else {
-                    window.history.replaceState({filtered: true}, 'filter', "/situacoes")                
+                    window.history.replaceState({filtered: true}, 'filter', "/bancos")                
                 }
 
                 //Filtra
-                return descricao
+                return nome
             })
             resolve(filtered)
         })        
@@ -302,7 +302,7 @@ class Situacoes extends Component {
         //Busca, filtra e trata os dados
         e.preventDefault()
         //Busca
-        fetch(config.protocol+'://'+config.server+':'+config.portBackend+'/api/getSituacoes').then(r => r.json()).then(async r => {
+        fetch(config.protocol+'://'+config.server+':'+config.portBackend+'/api/getBancos').then(r => r.json()).then(async r => {
             //Filtra
             let items = await this.filterData(r)
             //Trata
@@ -316,13 +316,13 @@ class Situacoes extends Component {
             <div className="boxSite colorSettings">
                 {/***************** Barra de Navegação *******************/}
                 <div className="boxNavBar">
-                    <NavBar selected="Situacoes"></NavBar>
+                    <NavBar selected="Bancos"></NavBar>
                 </div>
                 {/***************** Tela do WebSite *******************/}
                 <div className="boxTela">
                     {/*********************** Header ***********************/}
                     <div className="boxHeader">
-                        <h3 className="headerCadastro">Cadastro de Situações</h3>
+                        <h3 className="headerCadastro">Cadastro de Bancos</h3>
                     </div>
                     {/*********************** Filtros ***********************/}
                     <div className="boxFiltros">
@@ -330,8 +330,8 @@ class Situacoes extends Component {
                         <div className="filtros">
                             <div className="column-filter">
                                 <div className='itemFiltro'>
-                                    <label className="labelFiltro">Descrição</label>
-                                    <input name="descricao" type="text" id='filtroDescricao' className="inputFiltro" style={{width: '50vw'}} value={this.state.filter.descricao || ''} onChange={this.handleChange}></input>
+                                    <label className="labelFiltro">Nome</label>
+                                    <input name="nome" type="text" id='filtroNome' className="inputFiltro" style={{width: '50vw'}} value={this.state.filter.nome || ''} onChange={this.handleChange}></input>
                                 </div>
                             </div>
                             <br/>
@@ -349,15 +349,15 @@ class Situacoes extends Component {
                                     <div>
                                     <Modal.Header className="ModalBg">   
                                         <div className="ModalHeader">
-                                            <h3 className="headerModal">Registro de Situação</h3>
+                                            <h3 className="headerModal">Registro de Banco</h3>
                                         </div>
                                     </Modal.Header>
                                     <Modal.Body className="ModalBg" >   
                                         <div className='ModalBody'> 
-                                            <form id="registroSituacoes" name="registroSituacoes" onSubmit={ this.submitData }>
+                                            <form id="registroBancos" name="registroBancos" onSubmit={ this.submitData }>
                                                 <div>
-                                                    <label className="labelModal">Descrição</label>
-                                                    <input type="text" id="descricao" name="descricao" className="form-control" data-parse="uppercase" />
+                                                    <label className="labelModal">Nome</label>
+                                                    <input type="text" id="nome" name="nome" className="form-control" data-parse="uppercase" />
                                                 </div>
                                             </form>
                                         </div>
@@ -385,13 +385,13 @@ class Situacoes extends Component {
                                     columns={[
                                         {
                                             Header: "Código",
-                                            accessor: "pk_sit",
+                                            accessor: "pk_bco",
 
                                             // show: false
                                         }, 
                                         {
-                                            Header: "Descrição",
-                                            accessor: "descricao",
+                                            Header: "Nome",
+                                            accessor: "nome",
                                             minWidth: 400
                                         },
                                         {
@@ -400,11 +400,11 @@ class Situacoes extends Component {
                                             maxWidth: 300,
                                             Cell: row => { return (
                                                 <div className="buttonsDetailColumn">
-                                                    <button className="buttonDetailColumn" onClick={(e)=>{this.showModal(e, row.row.pk_sit)}}>
+                                                    <button className="buttonDetailColumn" onClick={(e)=>{this.showModal(e, row.row.pk_bco)}}>
                                                         <Icon size={20} icon={edit}></Icon>
                                                         Editar
                                                     </button>
-                                                    <button className="buttonDetailColumn" onClick={(e)=>{this.handleDelete(e, row.row.pk_sit)}}>
+                                                    <button className="buttonDetailColumn" onClick={(e)=>{this.handleDelete(e, row.row.pk_bco)}}>
                                                         <Icon size={20} icon={iosTrash}></Icon>
                                                         Excluir
                                                     </button>
@@ -414,7 +414,7 @@ class Situacoes extends Component {
                                     ]}
                                     defaultSorted={[
                                         {
-                                            id: "pk_sit",
+                                            id: "pk_bco",
                                             desc: false
                                         }
                                     ]}
@@ -430,4 +430,4 @@ class Situacoes extends Component {
     }
 }
 
-export default Situacoes;
+export default Bancos;

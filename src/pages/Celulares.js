@@ -330,7 +330,7 @@ class RegistroAssociados extends Component {
                                     <div>
                                     <Modal.Header className="ModalBg">   
                                         <div className="ModalHeader">
-                                            <h3 className="headerModal">Registro de Celulare</h3>
+                                            <h3 className="headerModal">Registro de Celular</h3>
                                         </div>
                                     </Modal.Header>
                                     <Modal.Body className="ModalBg" >   
@@ -338,7 +338,7 @@ class RegistroAssociados extends Component {
                                             <form id="registroCelulares" name="registroCelulares" onSubmit={ this.submitData }>
                                                 <div>
                                                     <label className="labelModal">Operadora</label>
-                                                    <select data-parse="uppercase" id="operadora" name="operadora" className="form-control" >
+                                                    <select data-parse="uppercase" id="operadora" name="operadora" className="form-control"  style={{ width: '100px'}}>
                                                         <option value="N" >Selecione</option>
                                                         <option value="C" >Claro</option>
                                                         <option value="T" >Tim</option>
@@ -348,14 +348,14 @@ class RegistroAssociados extends Component {
                                                 </div>
                                                 <div>
                                                     <label className="labelModal">Número</label>
-                                                    <input type="text" id="numero" name="numero" className="form-control" maxLength="10" data-parse="number" />
+                                                    <input type="text" id="numero" name="numero" className="form-control" maxLength="10" data-parse="number" style={{ width: '140px'}} />
                                                 </div>
                                                 <div>
                                                     <label className="labelModal">Observação</label>
-                                                    <input type="text" data-parse="uppercase" id="observacao" name="observacao" className="form-control" />
+                                                    <textarea type="text" data-parse="uppercase" id="observacao" name="observacao" className="form-control" />
                                                 </div>
                                                 <label className="labelModal">Inativo</label>
-                                                <select data-parse="uppercase" id="inativo" name="inativo" className="form-control" defaultValue="N">
+                                                <select data-parse="uppercase" id="inativo" name="inativo" className="form-control" defaultValue="N" style={{ width: '100px'}}>
                                                     <option value="N">Não</option>
                                                     <option value="S">Sim</option>
                                                 </select>
@@ -407,9 +407,15 @@ class RegistroAssociados extends Component {
                                         },
                                         {
                                             Header: "Inativo",
-                                            accessor: "inativo_nome",
-                                            minWidth: 50
-                                        }, 
+                                            // accessor: "inativo_str",
+                                            minWidth: 50,
+                                            Cell: row => { 
+                                                return (
+                                                    <div style={{ color: row.original.inativo==='S' ? 'red' : 'var(--table-font)'}}>
+                                                        {row.original.inativo_nome}
+                                                    </div>
+                                            )}
+                                        },
                                         {
                                             Header: "Opções",
                                             minWidth: 300,

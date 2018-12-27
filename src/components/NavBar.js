@@ -93,12 +93,12 @@ class NavBar extends Component {
                                 <p style={{fontWeight: "bold", textDecoration: "underline", textAlign: "left", marginLeft: "20px"}}>Associação</p>
                                     <MenuItem eventKey={1.1} href="/associados">Associados</MenuItem>
                                     <MenuItem eventKey={1.2} href="/situacoes">Situações</MenuItem>
-                                    <MenuItem eventKey={1.3} href="/lotacoes" disabled>Lotações</MenuItem>
-                                    <MenuItem eventKey={1.4} href="/categorias-associados" disabled>Categorias de Associados</MenuItem>
-                                    <MenuItem eventKey={1.5} href="/tipos-dependentes" disabled>Tipos de dependentes</MenuItem>
+                                    <MenuItem eventKey={1.3} href="/lotacoes">Lotações</MenuItem>
+                                    <MenuItem eventKey={1.4} href="/categorias-associados">Categorias de Associados</MenuItem>
+                                    <MenuItem eventKey={1.5} href="/tipos-dependentes">Tipos de dependentes</MenuItem>
                                 <MenuItem divider />
                                 <p style={{fontWeight: "bold", textDecoration: "underline", textAlign: "left", marginLeft: "20px"}}>Financeiro</p>
-                                    <MenuItem eventKey={1.1} href="/bancos" disabled>Bancos</MenuItem>
+                                    <MenuItem eventKey={1.1} href="/bancos">Bancos</MenuItem>
                                     <MenuItem eventKey={1.2} href="/tipos-servicos" disabled>Tipos de serviço</MenuItem>
                             </NavDropdown>
                             <NavDropdown eventKey={2} title="Lançamentos" id="basic-nav-dropdown">

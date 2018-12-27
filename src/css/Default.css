@@ -509,6 +509,7 @@ a {
   border: var(--lines) solid var(--filtro-lines);
   font-size: 1em;
   padding: 2px;
+  background: white;
 }
 
 .autocomplete-fieldInput {

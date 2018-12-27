@@ -6,7 +6,7 @@ import { Modal } from 'react-bootstrap'
 // import {LinkContainer} from 'react-router-bootstrap'
 import ReactTable from "react-table";
 import "react-table/react-table.css";
-import { garanteDate, asyncForEach, getParameterByName, populateForm } from '../Utils'
+import { asyncForEach, getParameterByName, populateForm } from '../Utils'
 // import moment from 'moment'
 import swal from 'sweetalert';
 import { Icon } from 'react-icons-kit'
@@ -31,7 +31,7 @@ const inputParsers = {
 };
 
 
-class Situacoes extends Component {
+class Lotacoes extends Component {
     constructor(props, context) {
         super(props, context);
         this.state = {
@@ -70,22 +70,23 @@ class Situacoes extends Component {
         e.preventDefault();
         let edicao = false
         let pk = '0'
+        console.log(codigo)
         if (Number(codigo) > 0) {
             edicao = true
             pk = codigo
-            await fetch(config.protocol+'://'+config.server+':'+config.portBackend+'/api/getSituacoes?pk='+(Number(codigo)).toString()).then(r => r.json()).then(async r => {
+            await fetch(config.protocol+'://'+config.server+':'+config.portBackend+'/api/getLotacoes?pk='+(Number(codigo)).toString()).then(r => r.json()).then(async r => {
             // await fetch(config.backend+'/getCelulares?pk='+(Number(e.target.id)).toString()).then(r => r.json()).then(async r => {
                 if (typeof r[0] === 'undefined') {
-                    window.location.href = '/situacoes'
+                    window.location.href = '/lotacoes'
                 } else {
-                    let form = document.getElementById('registroSituacoes');
+                    let form = document.getElementById('registroLotacoes');
                     console.log(r[0])
                     await populateForm(form, r[0])
                 }  
             })
         } else {
             edicao = false
-            document.getElementById("registroSituacoes").reset();
+            document.getElementById("registroLotacoes").reset();
         }
         this.setState({ modal: { show: true }, edit: edicao, codigo: pk })
     }
@@ -112,7 +113,7 @@ class Situacoes extends Component {
     submitData(e) {
         e.preventDefault();
         //Pega valores do form
-        const form = document.getElementById('registroSituacoes');
+        const form = document.getElementById('registroLotacoes');
         const data = new FormData(form);
 
         //Trata valores conforme data-parse dos inputs
@@ -142,7 +143,7 @@ class Situacoes extends Component {
         if (this.state.edit) {
             //Editar
             console.log(json)
-            fetch(config.protocol+'://'+config.server+':'+config.portBackend+'/api/editSituacoes?pk='+this.state.codigo, {
+            fetch(config.protocol+'://'+config.server+':'+config.portBackend+'/api/editLotacoes?pk='+this.state.codigo, {
                 method: 'POST',
                 headers: {
                     'Content-type': 'application/json'
@@ -162,7 +163,7 @@ class Situacoes extends Component {
             })
         } else {
             //Inserir
-            fetch(config.protocol+'://'+config.server+':'+config.portBackend+'/api/novoSituacoes', {
+            fetch(config.protocol+'://'+config.server+':'+config.portBackend+'/api/novoLotacoes', {
                 method: 'POST',
                 headers: {
                     'Content-type': 'application/json'
@@ -190,6 +191,7 @@ class Situacoes extends Component {
         let query = {}
         query.filtered = getParameterByName('filtered')
         query.descricao = getParameterByName('descricao')
+        query.inativo = getParameterByName('inativo')
 
 
         this.setState({
@@ -212,7 +214,7 @@ class Situacoes extends Component {
         }).then((result) => {
             if (result) {
                 //Delete
-                fetch(config.protocol+'://'+config.server+':'+config.portBackend+'/api/deleteSituacoes?pk='+pk, {
+                fetch(config.protocol+'://'+config.server+':'+config.portBackend+'/api/deleteLotacoes?pk='+pk, {
                     method: 'POST',
                     headers: {
                         'Content-type': 'application/json'
@@ -243,6 +245,7 @@ class Situacoes extends Component {
         let name = target.name
         let reg = this.state.filter
         reg[name] = value
+        console.log(reg)
         this.setState({
             filter : reg
         })
@@ -253,7 +256,7 @@ class Situacoes extends Component {
         //Limpa o filtro
         e.preventDefault()
         console.log('limpa')
-        window.history.replaceState({filtered: false}, 'filter', "/situacoes") //Apaga QueryURL
+        window.history.replaceState({filtered: false}, 'filter', "/lotacoes") //Apaga QueryURL
         this.setState({filter: []}) 
     }
 
@@ -261,7 +264,7 @@ class Situacoes extends Component {
         //Trata os campos
         return new Promise(async (resolve)=>{
             await asyncForEach(data, async (item)=>{
-               item.data_nasc = garanteDate(item.data_nasc)
+               item.inativo_str = item.inativo === 'S' ? 'Sim' : 'Não'
             })
             resolve(data)
         })
@@ -284,15 +287,23 @@ class Situacoes extends Component {
                     } else queryString = queryString + '&descricao=' + filter.descricao
                 }
 
+                //Filtro: Inativo
+                let inativo = (String(item.inativo) === String(filter.inativo)) || (filter.inativo || '') === ''
+                if (filter.inativo) {
+                    if (queryString === '?') {
+                        queryString = queryString + 'inativo=' + filter.inativo
+                    } else queryString = queryString + '&inativo=' + filter.inativo
+                }
+
                 //Monta Query URL
                 if (queryString !== '?') {
-                    window.history.replaceState({filtered: true}, 'filter', "/situacoes"+queryString+"&filtered=true")
+                    window.history.replaceState({filtered: true}, 'filter', "/lotacoes"+queryString+"&filtered=true")
                 } else {
-                    window.history.replaceState({filtered: true}, 'filter', "/situacoes")                
+                    window.history.replaceState({filtered: true}, 'filter', "/lotacoes")                
                 }
 
                 //Filtra
-                return descricao
+                return descricao && inativo
             })
             resolve(filtered)
         })        
@@ -302,7 +313,7 @@ class Situacoes extends Component {
         //Busca, filtra e trata os dados
         e.preventDefault()
         //Busca
-        fetch(config.protocol+'://'+config.server+':'+config.portBackend+'/api/getSituacoes').then(r => r.json()).then(async r => {
+        fetch(config.protocol+'://'+config.server+':'+config.portBackend+'/api/getLotacoes').then(r => r.json()).then(async r => {
             //Filtra
             let items = await this.filterData(r)
             //Trata
@@ -316,13 +327,13 @@ class Situacoes extends Component {
             <div className="boxSite colorSettings">
                 {/***************** Barra de Navegação *******************/}
                 <div className="boxNavBar">
-                    <NavBar selected="Situacoes"></NavBar>
+                    <NavBar selected="Lotacoes"></NavBar>
                 </div>
                 {/***************** Tela do WebSite *******************/}
                 <div className="boxTela">
                     {/*********************** Header ***********************/}
                     <div className="boxHeader">
-                        <h3 className="headerCadastro">Cadastro de Situações</h3>
+                        <h3 className="headerCadastro">Cadastro de Lotações</h3>
                     </div>
                     {/*********************** Filtros ***********************/}
                     <div className="boxFiltros">
@@ -332,6 +343,14 @@ class Situacoes extends Component {
                                 <div className='itemFiltro'>
                                     <label className="labelFiltro">Descrição</label>
                                     <input name="descricao" type="text" id='filtroDescricao' className="inputFiltro" style={{width: '50vw'}} value={this.state.filter.descricao || ''} onChange={this.handleChange}></input>
+                                </div>
+                                <div className='itemFiltro'>
+                                    <label className="labelFiltro">Situação</label>
+                                    <select data-parse="uppercase" id="filtroInativo" name="inativo" className="form-control" value={this.state.filter.inativo || ''} style={{ width: '100px'}} onChange={this.handleChange}>
+                                        <option value="">Todas</option>
+                                        <option value="N">Ativos</option>
+                                        <option value="S">Inativos</option>
+                                    </select>
                                 </div>
                             </div>
                             <br/>
@@ -349,15 +368,22 @@ class Situacoes extends Component {
                                     <div>
                                     <Modal.Header className="ModalBg">   
                                         <div className="ModalHeader">
-                                            <h3 className="headerModal">Registro de Situação</h3>
+                                            <h3 className="headerModal">Registro de Lotação</h3>
                                         </div>
                                     </Modal.Header>
                                     <Modal.Body className="ModalBg" >   
                                         <div className='ModalBody'> 
-                                            <form id="registroSituacoes" name="registroSituacoes" onSubmit={ this.submitData }>
+                                            <form id="registroLotacoes" name="registroLotacoes" onSubmit={ this.submitData }>
                                                 <div>
                                                     <label className="labelModal">Descrição</label>
                                                     <input type="text" id="descricao" name="descricao" className="form-control" data-parse="uppercase" />
+                                                </div>
+                                                 <div>
+                                                    <label className="labelModal">Inativo</label>
+                                                    <select data-parse="uppercase" id="inativo" name="inativo" className="form-control" defaultValue="N" style={{ width: '100px'}}>
+                                                        <option value="N">Não</option>
+                                                        <option value="S">Sim</option>
+                                                    </select>
                                                 </div>
                                             </form>
                                         </div>
@@ -385,14 +411,25 @@ class Situacoes extends Component {
                                     columns={[
                                         {
                                             Header: "Código",
-                                            accessor: "pk_sit",
+                                            accessor: "pk_lot",
 
                                             // show: false
                                         }, 
                                         {
-                                            Header: "Descrição",
+                                            Header: "Lotação",
                                             accessor: "descricao",
                                             minWidth: 400
+                                        },
+                                        {
+                                            Header: "Inativo",
+                                            // accessor: "inativo_str",
+                                            minWidth: 30,
+                                            Cell: row => { 
+                                                return (
+                                                    <div style={{ color: row.original.inativo==='S' ? 'red' : 'var(--table-font)'}}>
+                                                        {row.original.inativo_str}
+                                                    </div>
+                                            )}
                                         },
                                         {
                                             Header: "Opções",
@@ -400,11 +437,11 @@ class Situacoes extends Component {
                                             maxWidth: 300,
                                             Cell: row => { return (
                                                 <div className="buttonsDetailColumn">
-                                                    <button className="buttonDetailColumn" onClick={(e)=>{this.showModal(e, row.row.pk_sit)}}>
+                                                    <button className="buttonDetailColumn" onClick={(e)=>{this.showModal(e, row.row.pk_lot)}}>
                                                         <Icon size={20} icon={edit}></Icon>
                                                         Editar
                                                     </button>
-                                                    <button className="buttonDetailColumn" onClick={(e)=>{this.handleDelete(e, row.row.pk_sit)}}>
+                                                    <button className="buttonDetailColumn" onClick={(e)=>{this.handleDelete(e, row.row.pk_lot)}}>
                                                         <Icon size={20} icon={iosTrash}></Icon>
                                                         Excluir
                                                     </button>
@@ -414,7 +451,7 @@ class Situacoes extends Component {
                                     ]}
                                     defaultSorted={[
                                         {
-                                            id: "pk_sit",
+                                            id: "pk_lot",
                                             desc: false
                                         }
                                     ]}
@@ -430,4 +467,4 @@ class Situacoes extends Component {
     }
 }
 
-export default Situacoes;
+export default Lotacoes;

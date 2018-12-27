@@ -11,7 +11,11 @@ import Estados from './pages/Estados'
 import Paises from './pages/Paises'
 import Parametros from './pages/Parametros'
 import Situacoes from './pages/Situacoes'
+import Lotacoes from './pages/Lotacoes'
 import Home from './pages/Home'
+import CategoriasAssociados from './pages/CategoriasAssociados';
+import TiposDependentes from './pages/TiposDependentes';
+import Bancos from './pages/Bancos';
 
 class App extends Component {
   render() {
@@ -37,6 +41,14 @@ class App extends Component {
                 <Route exact path="/parametros" component={Parametros}>
                 </Route>
                 <Route exact path="/situacoes" component={Situacoes}>
+                </Route>
+                <Route exact path="/lotacoes" component={Lotacoes}>
+                </Route>
+                <Route exact path="/categorias-associados" component={CategoriasAssociados}>
+                </Route>
+                <Route exact path="/tipos-dependentes" component={TiposDependentes}>
+                </Route>
+                <Route exact path="/bancos" component={Bancos}>
                 </Route>
                 <Route component={Home}>
                 </Route>
