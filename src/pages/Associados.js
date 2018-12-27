@@ -7,6 +7,7 @@ import ReactTable from "react-table";
 import "react-table/react-table.css";
 import { garanteDate, asyncForEach, getParameterByName } from '../Utils'
 import moment from 'moment'
+import swal from 'sweetalert';
 import { Icon } from 'react-icons-kit'
 import {iosContact} from 'react-icons-kit/ionicons/iosContact'
 import {iphone} from 'react-icons-kit/ionicons/iphone'
@@ -29,6 +30,7 @@ class Associados extends Component {
         this.handleChange = this.handleChange.bind(this);
         this.filterData = this.filterData.bind(this);
         this.handleClean = this.handleClean.bind(this);
+        this.handleDelete = this.handleDelete.bind(this);
     }
 
     populaLotacao(item, id) {
@@ -99,6 +101,38 @@ class Associados extends Component {
 
 
 
+    }
+
+    handleDelete(e, pk) {
+        e.preventDefault();
+        swal({
+            dangerMode: true,
+            title: "Atenção!",
+            text: "O registro selecionado será excluído. Confirma?",
+            buttons: ["Não", "Sim"],
+        }).then((result) => {
+            if (result) {
+                //Delete
+                fetch(config.protocol+'://'+config.server+':'+config.portBackend+'/api/deleteAssociado?pk='+pk, {
+                    method: 'POST',
+                    headers: {
+                        'Content-type': 'application/json'
+                    },
+                    body: JSON.stringify({})
+                }).then(r=>r.json()).then(r=>{
+                    console.log(r)
+                    if (r.message === "Success!") {
+                        swal("Exlusão realizada", "Registro excluído com sucesso!", "success").then((result) => {
+                            //Caso filtered=true, traz form já processado
+                            var event = new Event('build');
+                            this.getData(event)
+                        });
+                    } else {
+                        swal("Exclusão não realizada", "Registro não foi excluído. Verifique os campos.", "error");
+                    }
+                })
+            }
+        });
     }
 
     handleChange(e) {
@@ -245,149 +279,151 @@ class Associados extends Component {
         let lotacoes = this.state.combos.map(this.populaLotacao)
         let situacoes = this.state.combos.map(this.populaSituacao)
         return (
-            <div className="boxTela colorSettings">
+            <div className="boxSite colorSettings">
                 {/***************** Barra de Navegação *******************/}
                 <div className="boxNavBar">
                     <NavBar selected="Associados"></NavBar>
                 </div>
-                {/*********************** Header ***********************/}
-                <div className="boxHeader">
-                    <h3 className="headerCadastro">Cadastro de Associados</h3>
-                </div>
-                {/*********************** Filtros ***********************/}
-                <div className="boxFiltros">
-                    {/* Parâmetros de pesquisa:<br/> */}
-                    <div className="filtros">
-                        <div className="column-filter">
-                            <div className='itemFiltro'>
-                                <label className="labelFiltro">Nome</label>
-                                <input name="nome" type="text" id='filtroNome' className="inputFiltro" style={{width: '50vw'}} value={this.state.filter.nome || ''} onChange={this.handleChange}></input>
-                            </div>
-                            <div className='itemFiltro'>
-                                <label className="labelFiltro">Lotação</label>
-                                <select name="lotacao" id='filtroLotacao' className="selectFiltro" value={this.state.filter.lotacao || 'T'} onChange={this.handleChange}>
-                                    <option value="">TODOS</option>
-                                    {lotacoes}
-                                </select>
+                {/***************** Tela do WebSite *******************/}
+                <div className="boxTela">
+                    {/*********************** Header ***********************/}
+                    <div className="boxHeader">
+                        <h3 className="headerCadastro">Cadastro de Associados</h3>
+                    </div>
+                    {/*********************** Filtros ***********************/}
+                    <div className="boxFiltros">
+                        {/* Parâmetros de pesquisa:<br/> */}
+                        <div className="filtros">
+                            <div className="column-filter">
+                                <div className='itemFiltro'>
+                                    <label className="labelFiltro">Nome</label>
+                                    <input name="nome" type="text" id='filtroNome' className="inputFiltro" style={{width: '50vw'}} value={this.state.filter.nome || ''} onChange={this.handleChange}></input>
+                                </div>
+                                <div className='itemFiltro'>
+                                    <label className="labelFiltro">Lotação</label>
+                                    <select name="lotacao" id='filtroLotacao' className="selectFiltro" value={this.state.filter.lotacao || 'T'} onChange={this.handleChange}>
+                                        <option value="">TODOS</option>
+                                        {lotacoes}
+                                    </select>
+                                </div>
+                                <br/>
+                                <div className='itemFiltro'>
+                                    <label className="labelFiltro">Dt. Nascimento</label>
+                                    <input type="date" name="data_nasc_min" id='filtroNome' className="inputFiltro" style={{width: '140px'}} value={this.state.filter.data_nasc_min || ''} onChange={this.handleChange}></input>
+                                    <input type="date" name="data_nasc_max" id='filtroNome' className="inputFiltro" style={{width: '140px'}} value={this.state.filter.data_nasc_max || ''} onChange={this.handleChange}></input>
+                                </div>
+                                <div className='itemFiltro'>
+                                    <label className="labelFiltro">Situação</label>
+                                    <select name="situacao" id='filtroSituacao' className="selectFiltro" value={this.state.filter.situacao || ''} onChange={this.handleChange}>
+                                        <option value="">TODAS</option>
+                                        {situacoes}
+                                    </select>
+                                </div>
+                                <div className='itemFiltro'>
+                                    <label className="labelFiltro">Matrícula</label>
+                                    <input name="matricula" type="text" id='filtroMatricula' className="inputFiltro"  style={{width: '100px'}} value={this.state.filter.matricula || ''} onChange={this.handleChange}></input>
+                                </div>
+                                <div className='itemFiltro'>
+                                    <label className="labelFiltro">RG</label>
+                                    <input name="rg" type="text" id='filtroRg' className="inputFiltro" value={this.state.filter.rg || ''}  style={{width: '100px'}} onChange={this.handleChange}></input>
+                                </div>
+                                <div className='itemFiltro'>
+                                    <label className="labelFiltro">CPF</label>
+                                    <input name="cpf" type="text" id='filtroCPF' className="inputFiltro" value={this.state.filter.cpf || ''}  style={{width: '110px'}} onChange={this.handleChange}></input>
+                                </div>
                             </div>
                             <br/>
-                            <div className='itemFiltro'>
-                                <label className="labelFiltro">Dt. Nascimento</label>
-                                <input type="date" name="data_nasc_min" id='filtroNome' className="inputFiltro" style={{width: '135px'}} value={this.state.filter.data_nasc_min || ''} onChange={this.handleChange}></input>
-                                <input type="date" name="data_nasc_max" id='filtroNome' className="inputFiltro" style={{width: '135px'}} value={this.state.filter.data_nasc_max || ''} onChange={this.handleChange}></input>
+                            <div className="column-filter-2">
+                                <button className="buttonFiltroProcessar" onClick={this.getData}><Icon size={20} style={{ display: "inline" }} icon={iosSearchStrong}></Icon>Processar</button>
+                                <button className="buttonFiltroLimpar" onClick={this.handleClean}><Icon size={20} style={{ display: "inline" }} icon={ic_clear}></Icon>Limpar</button>
+                                <LinkContainer to={"/associados/registro"}>
+                                    <button className="buttonNovo"><Icon size={20} style={{ display: "inline" }} icon={ic_add_circle}></Icon>Novo Registro</button>
+                                </LinkContainer> 
                             </div>
-                            <div className='itemFiltro'>
-                                <label className="labelFiltro">Situação</label>
-                                <select name="situacao" id='filtroSituacao' className="selectFiltro" value={this.state.filter.situacao || ''} onChange={this.handleChange}>
-                                    <option value="">TODAS</option>
-                                    {situacoes}
-                                </select>
-                            </div>
-                            <div className='itemFiltro'>
-                                <label className="labelFiltro">Matrícula</label>
-                                <input name="matricula" type="text" id='filtroMatricula' className="inputFiltro"  style={{width: '100px'}} value={this.state.filter.matricula || ''} onChange={this.handleChange}></input>
-                            </div>
-                            <div className='itemFiltro'>
-                                <label className="labelFiltro">RG</label>
-                                <input name="rg" type="text" id='filtroRg' className="inputFiltro" value={this.state.filter.rg || ''}  style={{width: '100px'}} onChange={this.handleChange}></input>
-                            </div>
-                            <div className='itemFiltro'>
-                                <label className="labelFiltro">CPF</label>
-                                <input name="cpf" type="text" id='filtroCPF' className="inputFiltro" value={this.state.filter.cpf || ''}  style={{width: '110px'}} onChange={this.handleChange}></input>
-                            </div>
+                        </div> 
+                    </div>
+                    {/*********************** Tabela ***********************/}
+                    <div style={{ paddingBottom: '30px'}}>
+                        <div style={{ marginLeft: '30px', marginTop: '30px', marginRight: '30px' }}>
+                                    
+                            <div className="divTabela">
+                                <ReactTable
+                                data={this.state.data}
+                                previousText = 'Anterior'
+                                nextText = 'Próximo'
+                                loadingText = 'Carregando...'
+                                pageText = 'Página'
+                                ofText = 'de'
+                                rowsText = 'registros'
+                                noDataText="Nenhum registro encontrado"
+                                columns={[
+                                    {
+                                        Header: "Matrícula",
+                                        accessor: "matricula",
+                                        width: 100
+                                    },
+                                    {
+                                        Header: "Associado",
+                                        accessor: "nome",
+                                        width: 400
+                                    },
+                                    {
+                                        Header: "CPF",
+                                        accessor: "cpf",
+                                        width: 110
+                                    },
+                                    {
+                                        Header: "RG",
+                                        accessor: "rg",
+                                        width: 110
+                                    },
+                                    {
+                                        Header: "Lotação",
+                                        accessor: "nomelot",
+                                        width: 100
+                                    },
+                                    {
+                                        Header: "Dt Nasc",
+                                        accessor: "data_nasc",
+                                        width: 90
+                                    },
+                                    {
+                                        Header: "Situação",
+                                        accessor: "nomesit"
+                                    },
+                                    {
+                                        Header: "Código",
+                                        accessor: "pk_ass",
+                                        show: false
+                                    }
+                                ]}
+                                defaultSorted={[
+                                    {
+                                        id: "matricula",
+                                        desc: true
+                                    }
+                                ]}
+                                defaultPageSize={10}
+                                className="-striped -highlight"
+                                SubComponent={row => {
+                                    return (
+                                        <div className="buttonsDetail">
+                                            <LinkContainer to={"/associados/dependentes?pk="+row.row.pk_ass}>
+                                                <button className="buttonDetail"><Icon size={20} style={{ display: "inline" }} icon={iosContact}></Icon>Dependentes</button>
+                                            </LinkContainer>                                    
+                                            <LinkContainer to={"/associados/celulares?pk="+row.row.pk_ass}>
+                                                <button className="buttonDetail"><Icon size={20} icon={iphone}></Icon>Celulares</button>
+                                            </LinkContainer>
+                                            <LinkContainer to={"/associados/registro?pk="+row.row.pk_ass}>
+                                                <button className="buttonDetail"><Icon size={20} icon={edit}></Icon>Editar</button>
+                                            </LinkContainer>
+                                            <button className="buttonDetail" onClick={(e) => {this.handleDelete(e, row.row.pk_ass)}} name={row.row.pk_ass}><Icon size={20} icon={iosTrash}></Icon>Excluir</button>
+                                        </div>
+                                    );
+                                }}
+                                /> 
+                            </div>  
                         </div>
-                        <br/>
-                        <div className="column-filter-2">
-                            <button className="buttonFiltroProcessar" onClick={this.getData}><Icon size={20} style={{ display: "inline" }} icon={iosSearchStrong}></Icon>Processar</button>
-                            <button className="buttonFiltroLimpar" onClick={this.handleClean}><Icon size={20} style={{ display: "inline" }} icon={ic_clear}></Icon>Limpar</button>
-                            <LinkContainer to={"/associados/registro"}>
-                                <button className="buttonNovo"><Icon size={20} style={{ display: "inline" }} icon={ic_add_circle}></Icon>Novo Registro</button>
-                            </LinkContainer> 
-                        </div>
-                    </div> 
-                </div>
-                {/*********************** Tabela ***********************/}
-                <div style={{ paddingBottom: '30px'}}>
-                    <div style={{ marginLeft: '30px', marginTop: '30px', marginRight: '30px' }}>
-                                
-                        <div className="divTabela">
-                            <ReactTable
-                            data={this.state.data}
-                            previousText = 'Anterior'
-                            nextText = 'Próximo'
-                            loadingText = 'Carregando...'
-                            pageText = 'Página'
-                            ofText = 'de'
-                            rowsText = 'registros'
-                            noDataText="Nenhum registro encontrado"
-                            columns={[
-                                {
-                                    Header: "Matrícula",
-                                    accessor: "matricula",
-                                    width: 100
-                                },
-                                {
-                                    Header: "Associado",
-                                    accessor: "nome",
-                                    width: 400
-                                },
-                                {
-                                    Header: "CPF",
-                                    accessor: "cpf",
-                                    width: 110
-                                },
-                                {
-                                    Header: "RG",
-                                    accessor: "rg",
-                                    width: 110
-                                },
-                                {
-                                    Header: "Lotação",
-                                    accessor: "nomelot",
-                                    width: 100
-                                },
-                                {
-                                    Header: "Dt Nasc",
-                                    accessor: "data_nasc",
-                                    width: 90
-                                },
-                                {
-                                    Header: "Situação",
-                                    accessor: "nomesit"
-                                },
-                                {
-                                    Header: "Código",
-                                    accessor: "pk_ass",
-                                    show: false
-                                }
-                            ]}
-                            defaultSorted={[
-                                {
-                                    id: "matricula",
-                                    desc: true
-                                }
-                            ]}
-                            defaultPageSize={10}
-                            className="-striped -highlight"
-                            SubComponent={row => {
-                                console.log()
-                                return (
-                                    <div className="buttonsDetail">
-                                        <LinkContainer to={"/associados/dependentes?pk="+row.row.pk_ass}>
-                                            <button className="buttonDetail"><Icon size={20} style={{ display: "inline" }} icon={iosContact}></Icon>Dependentes</button>
-                                        </LinkContainer>                                    
-                                        <LinkContainer to={"/associados/celulares?pk="+row.row.pk_ass}>
-                                            <button className="buttonDetail"><Icon size={20} icon={iphone}></Icon>Celulares</button>
-                                        </LinkContainer>
-                                        <LinkContainer to={"/associados/registro?pk="+row.row.pk_ass}>
-                                            <button className="buttonDetail"><Icon size={20} icon={edit}></Icon>Editar</button>
-                                        </LinkContainer>
-                                        <button className="buttonDetail"><Icon size={20} icon={iosTrash}></Icon>Excluir</button>
-                                    </div>
-                                );
-                            }}
-                            /> 
-                        </div>  
                     </div>
                 </div>
             </div>

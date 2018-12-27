@@ -46,6 +46,7 @@ export function removeAcento (text) {
     text = text.replace(new RegExp('[ÓÒÔÕ]','gi'), 'o');
     text = text.replace(new RegExp('[ÚÙÛ]','gi'), 'u');
     text = text.replace(new RegExp('[Ç]','gi'), 'c');
+    text = text.toUpperCase();
     return text;                 
 }
 

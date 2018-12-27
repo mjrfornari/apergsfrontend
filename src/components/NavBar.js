@@ -85,28 +85,28 @@ class NavBar extends Component {
                         <Nav>
                             <NavDropdown eventKey={1} title="Cadastros" id="basic-nav-dropdown">
                                 <p style={{fontWeight: "bold", textDecoration: "underline", textAlign: "left", marginLeft: "20px"}}>Gerais</p>
-                                    <MenuItem eventKey={1.1}>Países</MenuItem>
-                                    <MenuItem eventKey={1.2}>Estados</MenuItem>
-                                    <MenuItem eventKey={1.3}>Cidades</MenuItem>
-                                    <MenuItem eventKey={1.4}>Parâmetros</MenuItem>
+                                    <MenuItem eventKey={1.1} href="/paises">Países</MenuItem>
+                                    <MenuItem eventKey={1.2} href="/estados">Estados</MenuItem>
+                                    <MenuItem eventKey={1.3} href="/cidades">Cidades</MenuItem>
+                                    <MenuItem eventKey={1.4} href="/parametros">Parâmetros</MenuItem>
                                 <MenuItem divider />
                                 <p style={{fontWeight: "bold", textDecoration: "underline", textAlign: "left", marginLeft: "20px"}}>Associação</p>
                                     <MenuItem eventKey={1.1} href="/associados">Associados</MenuItem>
-                                    <MenuItem eventKey={1.2}>Situações</MenuItem>
-                                    <MenuItem eventKey={1.3}>Lotações</MenuItem>
-                                    <MenuItem eventKey={1.4}>Categorias de Associados</MenuItem>
-                                    <MenuItem eventKey={1.5}>Tipos de dependentes</MenuItem>
+                                    <MenuItem eventKey={1.2} href="/situacoes" disabled>Situações</MenuItem>
+                                    <MenuItem eventKey={1.3} href="/lotacoes" disabled>Lotações</MenuItem>
+                                    <MenuItem eventKey={1.4} href="/categorias-associados" disabled>Categorias de Associados</MenuItem>
+                                    <MenuItem eventKey={1.5} href="/tipos-dependentes" disabled>Tipos de dependentes</MenuItem>
                                 <MenuItem divider />
                                 <p style={{fontWeight: "bold", textDecoration: "underline", textAlign: "left", marginLeft: "20px"}}>Financeiro</p>
-                                    <MenuItem eventKey={1.1}>Bancos</MenuItem>
-                                    <MenuItem eventKey={1.2}>Tipos de serviço</MenuItem>
+                                    <MenuItem eventKey={1.1} href="/bancos" disabled>Bancos</MenuItem>
+                                    <MenuItem eventKey={1.2} href="/tipos-servicos" disabled>Tipos de serviço</MenuItem>
                             </NavDropdown>
                             <NavDropdown eventKey={2} title="Lançamentos" id="basic-nav-dropdown">
-                                <MenuItem eventKey={2.1}>Contas a receber</MenuItem>
+                                <MenuItem eventKey={2.1} href="/contas-receber" disabled>Contas a receber</MenuItem>
                             </NavDropdown>
                             <NavDropdown eventKey={3} title="Funções Especiais" id="basic-nav-dropdown">
                                 <p style={{fontWeight: "bold", textDecoration: "underline", textAlign: "left", marginLeft: "20px"}}>Sistema</p>
-                                    <MenuItem eventKey={3.1}>Usuários</MenuItem>
+                                    <MenuItem eventKey={3.1} href="/usuarios" disabled>Usuários</MenuItem>
                             </NavDropdown>
                         </Nav>
                         <Nav pullRight>

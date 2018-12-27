@@ -24,7 +24,7 @@ const inputParsers = {
 
 
 
-class RegistroAssociados extends Component {
+class Parametros extends Component {
     constructor(props, context) {
         super(props, context);
         this.state = {
@@ -300,7 +300,7 @@ class RegistroAssociados extends Component {
                 <div className="boxTela">
                     {/*********************** Header ***********************/}
                     <div className="boxHeader">
-                        <h3 className="headerCadastro">Registro de Associado</h3>
+                        <h3 className="headerCadastro">Parâmetros</h3>
                     </div>
                     {/*********************** Campos ***********************/}
                     <div style={{ paddingBottom: '30px'}}>
@@ -539,4 +539,4 @@ class RegistroAssociados extends Component {
     }
 }
 
-export default RegistroAssociados;
+export default Parametros;

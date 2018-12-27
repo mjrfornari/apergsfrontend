@@ -5,7 +5,13 @@
   --cor-letra: rgb(0, 0, 0);
   --cor-letra-disable: #000000;
   --background: #e1e6e6;
-  --filtro-lines: rgb(88, 85, 85);
+  --table-borders: #004136;
+  --table-stripped: #919191;
+  --table-button-font: #e1e6e6;
+  --table-button-background: #01352c;
+  --table-options-background: #004136;
+  --table-lines: #ffffff;
+  --filtro-lines: #004136;
   --header-background: #004136;
   --modal-header-background: #e1e6e6;
   --modal-header-font: #004136; 
@@ -21,16 +27,30 @@
   --navBar-detailed-background: rgb(199, 192, 192);
   --navBar-detailed-font: rgb(48, 46, 46);
   --button-background: #004136;
+  --buttons-detail-background: #e1e6e6;
+  --buttons-detail-font: #004136;
   --modal-background: #004136;
   --modal-button-background: #e1e6e6;
   --modal-button-font: #004136;
   --modal-font: #e1e6e6;
   --button-font: #e1e6e6;
+  --autocomplete-background: white;
+  --autocomplete-selected-background: #004136;
+  --autocomplete-selected-font: #e1e6e6;
+  --autocomplete-font: rgb(0, 0, 0);
+  --autocomplete-background-inModal: #e1e6e6;
+  --autocomplete-selected-background-inModal: #004136;
+  --autocomplete-border: #004136;
+  --autocomplete-border-inModal: #e1e6e6;
+  --autocomplete-selected-font-inModal: #e1e6e6;
+  --autocomplete-font-inModal: rgb(0, 0, 0);
 
 /************************************************************************************************************/  
 
 
 }
+
+
 
 .ModalShow {
   display: block;  
@@ -38,6 +58,124 @@
 
 .ModalHide {
   display: none;
+}
+
+
+.autocomplete-list {
+    border-radius: 5px;
+    background-color: var(--autocomplete-background);
+    border:none;
+    color: var(--autocomplete-font);
+    outline: none;
+    list-style-type: none; 
+    padding: 1px;
+    height: auto;
+    margin-top: 1px;
+    font-size: 1em;
+    font-weight: 300;
+    z-index: 1100;
+    width: auto;
+}
+
+.autocomplete-toggle {
+    border-radius: 5px;
+    border: none;
+    height: 30px;
+    width: 30px;
+    text-align: center;
+    font-size: 0.7em;
+    color: var(--autocomplete-background);
+    background: var(--autocomplete-border);
+}
+
+.autocomplete-toggle-inModal {
+    border-radius: 5px;
+    border: none;
+    height: 30px;
+    width: 30px;
+    text-align: center;
+    font-size: 0.7em;
+    color: var(--autocomplete-font-inModal);
+    background: var(--autocomplete-border-inModal);
+}
+
+.autocomplete-input {
+    float: left;
+    width: calc(100% - 30px);
+}
+
+.autocomplete-list-inModal {
+    border-radius: 5px;
+    background-color: var(--autocomplete-background-inModal);
+    border: none;
+    color: var(--autocomplete-font-inModal);
+    outline: none;
+    list-style-type: none; 
+    padding: 1px;
+    height: auto;
+    margin-top: 1px;
+    font-size: 1em;
+    font-weight: 300;
+    z-index: 1100;
+    width: auto;
+    /* width: calc(100% - 30px); */
+}
+
+.inModal {
+    border: none !important;
+    background: #ffffff;
+}
+
+.autocomplete-text {
+  margin-left: 7px;
+  margin-top: 7px;
+  word-break: break-word;
+  text-justify: distribute;
+  vertical-align: middle;
+}
+
+.autocomplete-text-inModal {
+  margin-left: 7px;
+  margin-top: 7px;
+  word-break: break-word;
+  text-justify: distribute;
+  vertical-align: middle;
+}
+
+.autocomplete {
+    user-select: none;
+    border-radius: 5px;
+    background-color: var(--autocomplete-background);
+    border: solid var(--autocomplete-border) 4px;
+    color: var(--cor-letra);
+    height: 150px;
+    outline: none;
+    /* border: 2px solid var(--cor-2); */
+    font-size: 1em;
+    padding: 10px;
+    font-weight: 300;
+    /* margin-top: 5px; */
+    z-index: 1100;
+    overflow-y: scroll;
+    width: 100%
+}
+
+.autocomplete-inModal {
+    user-select: none;
+    border-radius: 5px;
+    background-color: var(--autocomplete-background-inModal);
+    border: none;
+    color: var(--autocomplete-font-inModal);
+    height: 150px;
+    outline: none;
+    /* border: 2px solid var(--cor-2); */
+    font-size: 1em;
+    padding: 10px;
+    font-weight: 300;
+    /* margin-top: 10px; */
+    z-index: 1100;
+    overflow-y: scroll;
+    width: 100%
 }
 
 
@@ -137,6 +275,7 @@
   /* background-color: var(--cor-fundo); */
   z-index: 1500;
   margin-left: 10%;
+  margin-top:20px;
   width: 80%;
   height: auto;
   text-align: center;
@@ -210,16 +349,26 @@
   fill: white;
 }
 
-.boxTela {
-  height: auto;
+
+.boxSite {
+  height: 100vh;
   -webkit-touch-callout: none;
   margin: 0;
   width: auto;
-  background-color: var(--background);
+  background: var(--background);
+  /* border: 1px red solid; */
   font-family: 'Titillium Web', sans-serif;
   color: var(--cor-letra);
   /* display: content; */
-  border: 1px transparent solid
+}
+
+.boxTela {
+  height: calc(100vh - 52px);
+  margin: 0;
+  overflow-y: auto;
+  background: var(--background);
+  font-family: 'Titillium Web', sans-serif;
+  color: var(--cor-letra);
 }
 
 .boxFiltros {
@@ -234,7 +383,7 @@
 
 .filtros {
   border-radius: 10px;
-  border: 1px solid var(--filtro-lines);
+  border: 4px solid var(--filtro-lines);
   padding: 5px;
 }
 
@@ -251,12 +400,13 @@
   margin-bottom: 5px;
   margin-right: 5px;
   font-size: 0.95em;
+  vertical-align: top;
 }
 
 .inputFiltro {
   padding: 3px;
   margin-left: 0px;
-  height: 25px;
+  height: 30px;
   vertical-align: middle;
   line-height: 200%;
   margin-top: 0px;
@@ -264,29 +414,102 @@
   border: none;
   color: var(--cor-letra);
   outline: none;
-  border: 1px solid rgba(0, 0, 0, 0.26);
+  border: 4px solid var(--filtro-lines);
   font-size: 1em;
   padding: 2px;
 }
 
 .selectFiltro {
   margin-left: 0px;
-  height: 25px;
+  height: 30px;
   vertical-align: middle;
   line-height: 200%;
   border-radius: 5px;
   border: none;
   color: var(--cor-letra);
   outline: none;
-  border: 1px solid rgba(0, 0, 0, 0.26);
+  border: 4px solid var(--filtro-lines);
   font-size: 1em;
   padding: 2px;
 }
+
+.nav-tabs>li.active>a, .nav-tabs>li.active>a:focus, .nav-tabs>li.active>a:hover {
+  background-color: var(--filtro-lines);
+  color: var(--modal-font);
+  border-radius: 5px 5px 0 0;
+  border-top: 1px solid var(--filtro-lines);
+  border-left: 1px solid var(--filtro-lines);
+  border-right: 1px solid var(--filtro-lines);
+}
+
+
+.nav-tabs>li>a:hover {
+  background-color: var(--filtro-lines);
+  color: var(--modal-font);
+  border-radius: 5px 5px 0 0;
+  border-top: 1px solid var(--filtro-lines);
+  border-left: 1px solid var(--filtro-lines);
+  border-right: 1px solid var(--filtro-lines);
+  border-bottom: 1px solid var(--filtro-lines);
+}
+
+.nav-tabs>li>a{
+  background-color: rgba(12, 92, 43, 0.479);
+  color: var(--modal-font);
+  border-radius: 5px 5px 0 0;
+  border-top: 1px solid var(--filtro-lines);
+  border-left: 1px solid var(--filtro-lines);
+  border-right: 1px solid var(--filtro-lines);
+}
+
 
 .labelFiltro {
   display: block;
   font-size: .9em;
   color: var(--cor-letra);
+}
+
+.tab-pane {
+  padding-left: 30px;
+  padding-right: 30px;
+  padding-bottom: 30px;
+  border-radius: 0 10px 10px 10px;
+  border: 4px solid var(--filtro-lines);
+}
+
+.form-control {
+  padding: 3px;
+  margin-left: 0px;
+  height: 30px;
+  line-height: 200%;
+  margin-top: 0px;
+  border-radius: 5px;
+  border: none;
+  color: var(--cor-letra);
+  outline: none;
+  border: 4px solid var(--filtro-lines);
+  font-size: 1em;
+  padding: 2px;
+}
+
+.autocomplete-fieldInput {
+  display: none;
+}
+
+
+.form-control-inModal {
+  margin-left: 0px;
+  height: 30px;
+  vertical-align: center;
+  line-height: 200%;
+  margin-top: 0px;
+  border-radius: 5px;
+  border: none;
+  color: var(--cor-letra);
+  outline: none;
+  border: none;
+  font-size: 1em;
+  padding: 2px;
 }
 
 .labelModal {
@@ -328,8 +551,9 @@ input[type=checkbox] {
 }
 
 .buttonDetail {
-  background-color: var(--button-background);
-  color: var(--button-font);
+  /* background-color: var(--button-background); */
+  background-color: var(--buttons-detail-background);
+  color: var(--buttons-detail-font);
   border-radius: 10px;
   vertical-align: center;
   text-align: center;
@@ -337,6 +561,7 @@ input[type=checkbox] {
   margin-left: 10px;
   border: none;
   padding: 3px;
+  z-index: 30;
 }
 
 .buttonDetailColumn {
@@ -349,6 +574,7 @@ input[type=checkbox] {
   margin-left: 10px;
   border: none;
   padding: 3px;
+  z-index: 30;
 }
 
 .checkModal {
@@ -399,6 +625,7 @@ input[type=checkbox] {
   margin-bottom: 10px;
 }
 
+
 .buttonsDetailColumn {
   text-align: center;
 }
@@ -429,8 +656,9 @@ input[type=checkbox] {
 }
 
 .boxNavBar {
-  height: 5vh;
-  display:block;
+  height: 52px;
+  width: auto;
+  margin: 0;
 }
 
 .themeNavBar {
@@ -525,6 +753,7 @@ input[type=checkbox] {
 
 .boxHeader {
   margin-top: 30px;
+  margin-bottom: 30px;
   display:block;
 }
 
@@ -555,6 +784,12 @@ button:hover {
 
 .column-filter {
   float: left;
+  width: 80%;
+}
+
+
+.column-autocomplete {
+  
   width: 80%;
 }
 

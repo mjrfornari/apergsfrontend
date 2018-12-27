@@ -9,45 +9,48 @@ class Home extends Component {
 
     render() {
         return (
-            <div className="boxTela colorSettings">
+            <div className="boxSite colorSettings">
                 {/***************** Barra de Navegação *******************/}
                 <div className="boxNavBar">
-                    <NavBar selected="ApergsWeb"></NavBar>
+                    <NavBar></NavBar>
                 </div>
-                {/*********************** Header ***********************/}
-                <div className="boxHeader">
-                    {/* <h3 className="headerCadastro">Página Inicial</h3> */}
-                </div>
-                {/*********************** Filtros ***********************/}
-                <div style={{minHeight: '90vh'}}>
-                    <div style={{ width: 'calc(100% - 60px)', marginLeft: '30px', marginRight: '30px'}}>
-                        <div className="buttonsHome">
-                            <LinkContainer className="buttonHomeDiv" to="associados">
-                                <button >
-                                    <img alt="Associados" src={require('../imgs/associados.png')} className="buttonHome" title="Associados"/>
-                                    <br/>
-                                    Associados
-                                </button>
-                            </LinkContainer>
-                            <LinkContainer to="contas_receber">
-                                <button className="buttonHomeDiv">
-                                     {/* style={{height: '15vh', display:"block", width: 'auto'}} */}
-                                    <img alt="Contas a Receber" src={require('../imgs/contas_receber.png')} className="buttonHome" title="Associados"/>
-                                    <br/>
-                                    Contas a Receber
-                                </button>
-                            </LinkContainer>
+                {/***************** Tela do WebSite *******************/}
+                <div className="boxTela">
+                    {/*********************** Header ***********************/}
+                    <div className="boxHeader">
+                        {/* <h3 className="headerCadastro">Página Inicial</h3> */}
+                    </div>
+                    {/*********************** Filtros ***********************/}
+                    <div style={{minHeight: '80vh'}}>
+                        <div style={{ width: '80vw', marginLeft: '30px', marginRight: '30px'}}>
+                            <div className="buttonsHome">
+                                <LinkContainer className="buttonHomeDiv" to="associados">
+                                    <button >
+                                        <img alt="Associados" src={require('../imgs/associados.png')} className="buttonHome" title="Associados"/>
+                                        <br/>
+                                        Associados
+                                    </button>
+                                </LinkContainer>
+                                <LinkContainer to="contas_receber">
+                                    <button className="buttonHomeDiv">
+                                        {/* style={{height: '15vh', display:"block", width: 'auto'}} */}
+                                        <img alt="Contas a Receber" src={require('../imgs/contas_receber.png')} className="buttonHome" title="Associados"/>
+                                        <br/>
+                                        Contas a Receber
+                                    </button>
+                                </LinkContainer>
+                            </div>
+                        </div>
+                        <div>
+                            <img alt="Contas a Receber" src={require('../imgs/ApergsPNG.png')} title="Associados" className="logoHome"/>
                         </div>
                     </div>
-                    <div>
-                        <img alt="Contas a Receber" src={require('../imgs/ApergsPNG.png')} title="Associados" className="logoHome"/>
-                    </div>
+                    
+                    {/*********************** Tabela ***********************/}
+
+                    {/*********************** Rodapé ***********************/}
+                    
                 </div>
-                {/*********************** Tabela ***********************/}
-
-                {/*********************** Rodapé ***********************/}
-                
-
             </div>
         );
     }
