@@ -8,7 +8,7 @@
 	-ms-flex-direction: column;
 	flex-direction: column;
 	border: 1px solid rgba(0, 0, 0, 0.1);
-	border-radius: 5px;
+	border-radius: 10px;
 }
 
 .ReactTable * {
@@ -52,20 +52,20 @@
 	-ms-user-select: none;
 	user-select: none;
 	border: 4px var(--table-borders) solid;
-	border-radius: 5px 5px 0 0;
+	border-radius: 10px 10px 0 0;
 }
 
 .ReactTable .rt-thead.-headerGroups {
 	background: rgba(0, 0, 0, 0.03);
 	border-bottom: 1px solid rgba(0, 0, 0, 0.05);
 	border: 4px var(--table-borders) solid;
-	border-radius: 5px 5px 0 0;
+	border-radius: 10px 10px 0 0;
 }
 
 .ReactTable .rt-thead.-filters {
 	border-bottom: 1px solid rgba(0, 0, 0, 0.05);
 	border: 4px var(--table-borders) solid;
-	border-radius: 5px 5px 0 0;
+	border-radius: 10px 10px 0 0;
 }
 
 .ReactTable .rt-thead.-filters input,
@@ -78,19 +78,19 @@
 	font-weight: normal;
 	outline: none;
 	border: 4px var(--table-borders) solid;
-	border-radius: 5px 5px 0 0;
+	border-radius: 10px 10px 0 0;
 }
 
 .ReactTable .rt-thead.-filters .rt-th {
 	border-right: 1px solid rgba(0, 0, 0, 0.02);
 	border: 4px var(--table-borders) solid;
-	border-radius: 5px 5px 0 0;
+	border-radius: 10px 10px 0 0;
 }
 
 .ReactTable .rt-thead.-header {
 	box-shadow: 0 2px 15px 0 rgba(0, 0, 0, 0.15);
 	border: 4px var(--table-borders) solid;
-	border-radius: 5px 5px 0 0;
+	border-radius: 10px 10px 0 0;
 }
 
 .ReactTable .rt-thead .rt-tr {
@@ -483,7 +483,7 @@
 .ReactTable .-pagination {
 	border: 4px solid var(--table-borders);
 	background: var(--table-borders);
-	border-radius: 0 0 5px 5px;
+	border-radius: 0 0 10px 10px;
 }
 
 .ReactTable .-pagination .-pageInfo {
