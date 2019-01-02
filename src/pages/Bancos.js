@@ -284,6 +284,14 @@ class Bancos extends Component {
                     } else queryString = queryString + '&nome=' + filter.nome
                 }
 
+                //Filtro: Inativo
+                let inativo = (String(item.inativo) === String(filter.inativo)) || (filter.inativo || '') === ''
+                if (filter.inativo) {
+                    if (queryString === '?') {
+                        queryString = queryString + 'inativo=' + filter.inativo
+                    } else queryString = queryString + '&inativo=' + filter.inativo
+                }
+
                 //Monta Query URL
                 if (queryString !== '?') {
                     window.history.replaceState({filtered: true}, 'filter', "/bancos"+queryString+"&filtered=true")
@@ -292,7 +300,7 @@ class Bancos extends Component {
                 }
 
                 //Filtra
-                return nome
+                return nome && inativo
             })
             resolve(filtered)
         })        

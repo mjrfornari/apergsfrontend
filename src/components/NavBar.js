@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import {Nav, Navbar, NavDropdown, NavItem, MenuItem} from 'react-bootstrap'
 import '../css/Default.css';
+import swal from 'sweetalert';
 
 
 
@@ -49,6 +50,23 @@ class NavBar extends Component {
         })
     }
 
+    logout(e) {
+        
+        e.preventDefault();
+        swal({
+            dangerMode: true,
+            title: "Atenção!",
+            text: "Ao sair, todas as alterações em andamento serão descartadas. Você tem certeza que deseja sair?",
+            buttons: ["Não", "Sim"],
+        }).then((result) => {
+            if (result) {
+                sessionStorage['authApergs'] = JSON.stringify({ authenticated: false, user: 0 })
+                window.location.reload();
+            }
+        });
+        
+    }
+
     render() {
         // let detailed = this.items(this.state.item)
         // return (
@@ -61,6 +79,7 @@ class NavBar extends Component {
         //         <a id='exit' className="logOutNavBar" href='#test'>Sair</a>
         //     </div>
         // );
+
 
         return(
             <div>
@@ -92,14 +111,14 @@ class NavBar extends Component {
                                 <MenuItem divider />
                                 <p style={{fontWeight: "bold", textDecoration: "underline", textAlign: "left", marginLeft: "20px"}}>Associação</p>
                                     <MenuItem eventKey={1.1} href="/associados">Associados</MenuItem>
-                                    <MenuItem eventKey={1.2} href="/situacoes">Situações</MenuItem>
+                                    {/* <MenuItem eventKey={1.2} href="/situacoes">Situações</MenuItem> */}
                                     <MenuItem eventKey={1.3} href="/lotacoes">Lotações</MenuItem>
                                     <MenuItem eventKey={1.4} href="/categorias-associados">Categorias de Associados</MenuItem>
-                                    <MenuItem eventKey={1.5} href="/tipos-dependentes">Tipos de dependentes</MenuItem>
+                                    <MenuItem eventKey={1.5} href="/grau-parentesco">Grau de Parentesco</MenuItem>
                                 <MenuItem divider />
                                 <p style={{fontWeight: "bold", textDecoration: "underline", textAlign: "left", marginLeft: "20px"}}>Financeiro</p>
                                     <MenuItem eventKey={1.1} href="/bancos">Bancos</MenuItem>
-                                    <MenuItem eventKey={1.2} href="/tipos-servicos" disabled>Tipos de serviço</MenuItem>
+                                    <MenuItem eventKey={1.2} href="/tipos-servicos">Tipos de serviço</MenuItem>
                             </NavDropdown>
                             <NavDropdown eventKey={2} title="Lançamentos" id="basic-nav-dropdown">
                                 <MenuItem eventKey={2.1} href="/contas-receber" disabled>Contas a receber</MenuItem>
@@ -110,7 +129,7 @@ class NavBar extends Component {
                             </NavDropdown>
                         </Nav>
                         <Nav pullRight>
-                            <NavItem eventKey={1} href="#logout">
+                            <NavItem eventKey={1} onClick={this.logout}>
                                 Sair
                             </NavItem>
                         </Nav>

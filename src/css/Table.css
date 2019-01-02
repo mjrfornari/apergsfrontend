@@ -519,6 +519,14 @@
 	border-radius: 0 0 10px 10px;
 }
 
+.-pageInfo {
+	color: var(--table-button-font)
+}
+
+.-pageJump {
+	color: black;
+}
+
 .ReactTable .-pagination .-pageInfo {
 	display: inline-block;
 	margin: 3px 10px;

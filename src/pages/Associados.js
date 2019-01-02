@@ -277,7 +277,7 @@ class Associados extends Component {
 
     render() {
         let lotacoes = this.state.combos.map(this.populaLotacao)
-        let situacoes = this.state.combos.map(this.populaSituacao)
+        // let situacoes = this.state.combos.map(this.populaSituacao)
         return (
             <div className="boxSite colorSettings">
                 {/***************** Barra de Navegação *******************/}
@@ -312,13 +312,13 @@ class Associados extends Component {
                                     <input type="date" name="data_nasc_min" id='filtroNome' className="inputFiltro" style={{width: '140px'}} value={this.state.filter.data_nasc_min || ''} onChange={this.handleChange}></input>
                                     <input type="date" name="data_nasc_max" id='filtroNome' className="inputFiltro" style={{width: '140px'}} value={this.state.filter.data_nasc_max || ''} onChange={this.handleChange}></input>
                                 </div>
-                                <div className='itemFiltro'>
+                                {/* <div className='itemFiltro'>
                                     <label className="labelFiltro">Situação</label>
                                     <select name="situacao" id='filtroSituacao' className="selectFiltro" value={this.state.filter.situacao || ''} onChange={this.handleChange}>
                                         <option value="">TODAS</option>
                                         {situacoes}
                                     </select>
-                                </div>
+                                </div> */}
                                 <div className='itemFiltro'>
                                     <label className="labelFiltro">Matrícula</label>
                                     <input name="matricula" type="text" id='filtroMatricula' className="inputFiltro"  style={{width: '100px'}} value={this.state.filter.matricula || ''} onChange={this.handleChange}></input>
@@ -360,12 +360,12 @@ class Associados extends Component {
                                     {
                                         Header: "Matrícula",
                                         accessor: "matricula",
-                                        width: 100
+                                        width: 80
                                     },
                                     {
                                         Header: "Associado",
                                         accessor: "nome",
-                                        width: 400
+                                        width: 420
                                     },
                                     {
                                         Header: "CPF",
@@ -376,6 +376,11 @@ class Associados extends Component {
                                         Header: "RG",
                                         accessor: "rg",
                                         width: 110
+                                    },
+                                    {
+                                        Header: "Categoria de Associado",
+                                        accessor: "nomecat",
+                                        width: 150
                                     },
                                     {
                                         Header: "Lotação",

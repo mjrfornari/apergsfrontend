@@ -6,7 +6,7 @@ import { Modal } from 'react-bootstrap'
 // import {LinkContainer} from 'react-router-bootstrap'
 import ReactTable from "react-table";
 import "react-table/react-table.css";
-import { garanteDate, asyncForEach, getParameterByName, populateForm, onBlurCurrency,setInputFilter  } from '../Utils'
+import { garanteDate, asyncForEach, getParameterByName, populateForm } from '../Utils'
 // import moment from 'moment'
 import swal from 'sweetalert';
 import { Icon } from 'react-icons-kit'
@@ -31,7 +31,7 @@ const inputParsers = {
 };
 
 
-class CategoriasAssociados extends Component {
+class GrauParentesco extends Component {
     constructor(props, context) {
         super(props, context);
         this.state = {
@@ -73,20 +73,19 @@ class CategoriasAssociados extends Component {
         if (Number(codigo) > 0) {
             edicao = true
             pk = codigo
-            await fetch(config.protocol+'://'+config.server+':'+config.portBackend+'/api/getCategoriasAssociados?pk='+(Number(codigo)).toString()).then(r => r.json()).then(async r => {
+            await fetch(config.protocol+'://'+config.server+':'+config.portBackend+'/api/getTiposDependentes?pk='+(Number(codigo)).toString()).then(r => r.json()).then(async r => {
             // await fetch(config.backend+'/getCelulares?pk='+(Number(e.target.id)).toString()).then(r => r.json()).then(async r => {
                 if (typeof r[0] === 'undefined') {
-                    window.location.href = '/categorias-associados'
+                    window.location.href = '/tipos-dependentes'
                 } else {
-                    let form = document.getElementById('registroCategoriasAssociados');
+                    let form = document.getElementById('registroTiposDependentes');
                     console.log(r[0])
-                    r[0].valor_mensalidade = r[0].valor_mensalidade.toFixed(2).replace(".", ",")
                     await populateForm(form, r[0])
                 }  
             })
         } else {
             edicao = false
-            document.getElementById("registroCategoriasAssociados").reset();
+            document.getElementById("registroTiposDependentes").reset();
         }
         this.setState({ modal: { show: true }, edit: edicao, codigo: pk })
     }
@@ -113,7 +112,7 @@ class CategoriasAssociados extends Component {
     submitData(e) {
         e.preventDefault();
         //Pega valores do form
-        const form = document.getElementById('registroCategoriasAssociados');
+        const form = document.getElementById('registroTiposDependentes');
         const data = new FormData(form);
 
         //Trata valores conforme data-parse dos inputs
@@ -131,12 +130,6 @@ class CategoriasAssociados extends Component {
             }
         }
 
-        //Valor para sql
-        let valor = data.get('valor_mensalidade')
-        valor = valor.replace(',', '.')
-        console.log(valor)
-        data.set('valor_mensalidade', valor)
-
 
         //Converte FormData em JSON
         var object = {};
@@ -149,7 +142,7 @@ class CategoriasAssociados extends Component {
         if (this.state.edit) {
             //Editar
             console.log(json)
-            fetch(config.protocol+'://'+config.server+':'+config.portBackend+'/api/editCategoriasAssociados?pk='+this.state.codigo, {
+            fetch(config.protocol+'://'+config.server+':'+config.portBackend+'/api/editTiposDependentes?pk='+this.state.codigo, {
                 method: 'POST',
                 headers: {
                     'Content-type': 'application/json'
@@ -169,7 +162,7 @@ class CategoriasAssociados extends Component {
             })
         } else {
             //Inserir
-            fetch(config.protocol+'://'+config.server+':'+config.portBackend+'/api/novoCategoriasAssociados', {
+            fetch(config.protocol+'://'+config.server+':'+config.portBackend+'/api/novoTiposDependentes', {
                 method: 'POST',
                 headers: {
                     'Content-type': 'application/json'
@@ -192,9 +185,6 @@ class CategoriasAssociados extends Component {
 
 
     async componentDidMount() {
-        setInputFilter(document.getElementById("valor_mensalidade"), function(value) {
-            return /^-?\d*[.,]?\d*$/.test(value);
-        });
 
         //Carregar Parâmetros de pesquisa
         let query = {}
@@ -222,7 +212,7 @@ class CategoriasAssociados extends Component {
         }).then((result) => {
             if (result) {
                 //Delete
-                fetch(config.protocol+'://'+config.server+':'+config.portBackend+'/api/deleteCategoriasAssociados?pk='+pk, {
+                fetch(config.protocol+'://'+config.server+':'+config.portBackend+'/api/deleteTiposDependentes?pk='+pk, {
                     method: 'POST',
                     headers: {
                         'Content-type': 'application/json'
@@ -263,7 +253,7 @@ class CategoriasAssociados extends Component {
         //Limpa o filtro
         e.preventDefault()
         console.log('limpa')
-        window.history.replaceState({filtered: false}, 'filter', "/categorias-associados") //Apaga QueryURL
+        window.history.replaceState({filtered: false}, 'filter', "/tipos-dependentes") //Apaga QueryURL
         this.setState({filter: []}) 
     }
 
@@ -296,9 +286,9 @@ class CategoriasAssociados extends Component {
 
                 //Monta Query URL
                 if (queryString !== '?') {
-                    window.history.replaceState({filtered: true}, 'filter', "/categorias-associados"+queryString+"&filtered=true")
+                    window.history.replaceState({filtered: true}, 'filter', "/tipos-dependentes"+queryString+"&filtered=true")
                 } else {
-                    window.history.replaceState({filtered: true}, 'filter', "/categorias-associados")                
+                    window.history.replaceState({filtered: true}, 'filter', "/tipos-dependentes")                
                 }
 
                 //Filtra
@@ -312,7 +302,7 @@ class CategoriasAssociados extends Component {
         //Busca, filtra e trata os dados
         e.preventDefault()
         //Busca
-        fetch(config.protocol+'://'+config.server+':'+config.portBackend+'/api/getCategoriasAssociados').then(r => r.json()).then(async r => {
+        fetch(config.protocol+'://'+config.server+':'+config.portBackend+'/api/getTiposDependentes').then(r => r.json()).then(async r => {
             //Filtra
             let items = await this.filterData(r)
             //Trata
@@ -326,13 +316,13 @@ class CategoriasAssociados extends Component {
             <div className="boxSite colorSettings">
                 {/***************** Barra de Navegação *******************/}
                 <div className="boxNavBar">
-                    <NavBar selected="CategoriasAssociados"></NavBar>
+                    <NavBar selected="TiposDependentes"></NavBar>
                 </div>
                 {/***************** Tela do WebSite *******************/}
                 <div className="boxTela">
                     {/*********************** Header ***********************/}
                     <div className="boxHeader">
-                        <h3 className="headerCadastro">Cadastro de Categorias de Associados</h3>
+                        <h3 className="headerCadastro">Cadastro de Grau de Parentesco</h3>
                     </div>
                     {/*********************** Filtros ***********************/}
                     <div className="boxFiltros">
@@ -343,7 +333,6 @@ class CategoriasAssociados extends Component {
                                     <label className="labelFiltro">Descrição</label>
                                     <input name="descricao" type="text" id='filtroDescricao' className="inputFiltro" style={{width: '50vw'}} value={this.state.filter.descricao || ''} onChange={this.handleChange}></input>
                                 </div>
-
                             </div>
                             <br/>
                             <div className="column-filter-2">
@@ -360,19 +349,15 @@ class CategoriasAssociados extends Component {
                                     <div>
                                     <Modal.Header className="ModalBg">   
                                         <div className="ModalHeader">
-                                            <h3 className="headerModal">Registro de Categoria de Associados</h3>
+                                            <h3 className="headerModal">Registro de Grau de Parentesco</h3>
                                         </div>
                                     </Modal.Header>
                                     <Modal.Body className="ModalBg" >   
                                         <div className='ModalBody'> 
-                                            <form id="registroCategoriasAssociados" name="registroCategoriasAssociados" onSubmit={ this.submitData }>
+                                            <form id="registroTiposDependentes" name="registroTiposDependentes" onSubmit={ this.submitData }>
                                                 <div>
                                                     <label className="labelModal">Descrição</label>
                                                     <input type="text" id="descricao" name="descricao" className="form-control" data-parse="uppercase" />
-                                                </div>
-                                                <div>
-                                                    <label className="labelModal">Valor Mensalidade (R$)</label>
-                                                    <input type="text" id="valor_mensalidade" name="valor_mensalidade" className="form-control" style={{ width: '120px' }} onBlur={onBlurCurrency}/>
                                                 </div>
                                             </form>
                                         </div>
@@ -400,7 +385,7 @@ class CategoriasAssociados extends Component {
                                     columns={[
                                         {
                                             Header: "Código",
-                                            accessor: "pk_cat",
+                                            accessor: "pk_tde",
 
                                             // show: false
                                         }, 
@@ -410,27 +395,16 @@ class CategoriasAssociados extends Component {
                                             minWidth: 400
                                         },
                                         {
-                                            Header: "Valor Mensalidade",
-                                            // accessor: "inativo_str",
-                                            minWidth: 150,
-                                            Cell: row => { 
-                                                return (
-                                                    <div>
-                                                        {Number(row.original.valor_mensalidade).toLocaleString('pt-BR', {style: 'currency', currency: 'BRL'})}
-                                                    </div>
-                                            )}
-                                        },
-                                        {
                                             Header: "Opções",
                                             minWidth: 300,
                                             maxWidth: 300,
                                             Cell: row => { return (
                                                 <div className="buttonsDetailColumn">
-                                                    <button className="buttonDetailColumn" onClick={(e)=>{this.showModal(e, row.row.pk_cat)}}>
+                                                    <button className="buttonDetailColumn" onClick={(e)=>{this.showModal(e, row.row.pk_tde)}}>
                                                         <Icon size={20} icon={edit}></Icon>
                                                         Editar
                                                     </button>
-                                                    <button className="buttonDetailColumn" onClick={(e)=>{this.handleDelete(e, row.row.pk_cat)}}>
+                                                    <button className="buttonDetailColumn" onClick={(e)=>{this.handleDelete(e, row.row.pk_tde)}}>
                                                         <Icon size={20} icon={iosTrash}></Icon>
                                                         Excluir
                                                     </button>
@@ -440,7 +414,7 @@ class CategoriasAssociados extends Component {
                                     ]}
                                     defaultSorted={[
                                         {
-                                            id: "pk_sit",
+                                            id: "pk_tde",
                                             desc: false
                                         }
                                     ]}
@@ -456,4 +430,4 @@ class CategoriasAssociados extends Component {
     }
 }
 
-export default CategoriasAssociados;
+export default GrauParentesco;

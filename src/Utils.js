@@ -50,6 +50,30 @@ export function removeAcento (text) {
     return text;                 
 }
 
+
+export function setInputFilter(textbox, inputFilter) {
+  ["input", "keydown", "keyup", "mousedown", "mouseup", "select", "contextmenu", "drop"].forEach(function(event) {
+    textbox.addEventListener(event, function() {
+      if (inputFilter(this.value)) {
+        this.oldValue = this.value;
+        this.oldSelectionStart = this.selectionStart;
+        this.oldSelectionEnd = this.selectionEnd;
+      } else if (this.hasOwnProperty("oldValue")) {
+        this.value = this.oldValue;
+        this.setSelectionRange(this.oldSelectionStart, this.oldSelectionEnd);
+      }
+    });
+  });
+}
+
+export function onBlurCurrency(e) {
+    e.preventDefault();
+    console.log(e.target.value)
+    let value = e.target.value.replace(".", "").replace(",", ".")
+    value = Number(value).toFixed(2).replace(".", ",")
+    e.target.value = value
+}
+
 export function now(aux) {
     let now = new Date ()
     now.setDate(now.getDate() + aux)
@@ -120,7 +144,7 @@ export function populateForm(frm, data) {
             // eslint-disable-next-line
             switch($ctrl.attr("type"))  
             {  
-                case "text" :   case "hidden":  case "textarea":  
+                case "text" :   case "hidden":  case "textarea":  case "date":  
                     $ctrl.val(value);   
                     break;   
                 case "radio" : case "checkbox":   

@@ -5,31 +5,12 @@ import '../css/Default.css';
 import { Modal } from 'react-bootstrap'
 import ReactTable from "react-table";
 import "react-table/react-table.css";
-import { getParameterByName, asyncForEach, populateForm } from '../Utils'
+import { getParameterByName, asyncForEach, populateForm, garanteDate, dateSql } from '../Utils'
 import swal from 'sweetalert';
 import { Icon } from 'react-icons-kit'
 import {edit} from 'react-icons-kit/ionicons/edit'
 import {iosTrash} from 'react-icons-kit/ionicons/iosTrash'
 import {ic_add_circle} from 'react-icons-kit/md/ic_add_circle'
-
-const operadoras = [
-    {
-        nome: 'Claro',
-        codigo: 'C'
-    },
-    {
-        nome: 'Oi',
-        codigo: 'O'
-    },
-    {
-        nome: 'Tim',
-        codigo: 'T'
-    },
-    {
-        nome: 'Vivo',
-        codigo: 'V'
-    }
-]
 
 
 const inputParsers = {
@@ -49,7 +30,7 @@ const inputParsers = {
 
 
 
-class Celulares extends Component {
+class Dependentes extends Component {
     constructor(props, context) {
         super(props, context);
         this.state = {
@@ -74,6 +55,30 @@ class Celulares extends Component {
 
     }
 
+    populaCategoria(item, id) {
+        if (item.type === 'categoria'){
+            return (
+                <option value={item.value} key={id}>{item.display}</option>  
+            )
+        }
+    }
+
+    populaBanco(item, id) {
+        if (item.type === 'banco'){
+            return (
+                <option value={item.value} key={id}>{item.display}</option>  
+            )
+        }
+    }
+
+    populaGrau(item, id) {
+        if (item.type === 'grau'){
+            return (
+                <option value={item.value} key={id}>{item.display}</option>  
+            )
+        }
+    }
+
     closeModal() {
         swal({
             dangerMode: true,
@@ -95,18 +100,20 @@ class Celulares extends Component {
         if (Number(codigo) > 0) {
             edicao = true
             pk = codigo
-            await fetch(config.protocol+'://'+config.server+':'+config.portBackend+'/api/getCelulares?pk='+(Number(codigo)).toString()).then(r => r.json()).then(async r => {
-            // await fetch(config.backend+'/getCelulares?pk='+(Number(e.target.id)).toString()).then(r => r.json()).then(async r => {
+            await fetch(config.protocol+'://'+config.server+':'+config.portBackend+'/api/getDependentes?pk='+(Number(codigo)).toString()).then(r => r.json()).then(async r => {
+            // await fetch(config.backend+'/getDependentes?pk='+(Number(e.target.id)).toString()).then(r => r.json()).then(async r => {
                 if (typeof r[0] === 'undefined') {
                     window.location.href = '/associados'
                 } else {
-                    let form = document.getElementById('registroCelulares');
+                    let form = document.getElementById('registroDependentes');
+                    r[0].data_nasc = dateSql(r[0].data_nasc)
+                    console.log(r[0].data_nasc)
                     await populateForm(form, r[0])
                 }  
             })
         } else {
             edicao = false
-            document.getElementById("registroCelulares").reset();
+            document.getElementById("registroDependentes").reset();
         }
         this.setState({ modal: { show: true }, edit: edicao, codigo: pk })
     }
@@ -120,6 +127,51 @@ class Celulares extends Component {
     }
 
     async componentDidMount() {      
+        //Categoria
+        await fetch(config.protocol+'://'+config.server+':'+config.portBackend+'/api/getCategoriasAssociados').then(r => r.json()).then(async r => {
+            let combosCategoria = []
+            await asyncForEach(r, async (item)=>{
+               let categoria = {
+                    type: 'categoria',
+                    display: item.descricao,
+                    value: item.pk_cat
+                }
+                await combosCategoria.push(categoria)
+            })
+            this.setState({combos: combosCategoria})
+        })  
+
+        //Graus
+        await fetch(config.protocol+'://'+config.server+':'+config.portBackend+'/api/getTiposDependentes').then(r => r.json()).then(async r => {
+            let combosGrau = this.state.combos
+            await asyncForEach(r, async (item)=>{
+               let grau = {
+                    type: 'grau',
+                    display: item.descricao,
+                    value: item.pk_tde
+                }
+                await combosGrau.push(grau)
+            })
+            this.setState({combos: combosGrau})
+        })  
+
+        //Bancos
+        await fetch(config.protocol+'://'+config.server+':'+config.portBackend+'/api/getBancos').then(r => r.json()).then(async r => {
+            let combosBancos = this.state.combos
+            await asyncForEach(r, async (item)=>{
+               let bancos = {
+                    type: 'banco',
+                    display: item.nome,
+                    value: item.pk_bco
+                }
+                
+                await combosBancos.push(bancos)
+            })
+            // console.log(combosBancos)
+            this.setState({combos: combosBancos})
+        })  
+
+
         //Buscar informações do Associado
         let query = {}
         query.pk = Number(getParameterByName('pk'))
@@ -131,7 +183,7 @@ class Celulares extends Component {
                     window.location.href = '/associados'
                 } else {
                     this.setState({ associado: r[0] })
-                    fetch(config.protocol+'://'+config.server+':'+config.portBackend+'/api/getCelulares?fk='+query.pk).then(r => r.json()).then(async r => {
+                    fetch(config.protocol+'://'+config.server+':'+config.portBackend+'/api/getDependentes?fk='+query.pk).then(r => r.json()).then(async r => {
                         console.log(r[0])
                         let items = await this.modelingData(r)
                         this.setState({data: items})
@@ -165,19 +217,60 @@ class Celulares extends Component {
 
     }
 
+    validateData(data) {
+        let valid = { isValid: true }
+        //Consistências
+
+        //Nome
+        if (data.get('nome')) {
+            valid = { isValid: true }
+        } else {
+            return { isValid: false, title: 'Campo inválido!', message: 'Verifique o campo NOME.'}
+        }
+
+        //Categoria
+        if (data.get('fk_cat') !== 'NNN') {
+            valid = { isValid: true }
+        } else {
+            return { isValid: false, title: 'Campo inválido!', message: 'Verifique o campo CATEGORIA DE ASSOCIADO.'}
+        }
+
+        //Grau de Parentesco
+        if (data.get('fk_gra') !== 'NNN') {
+            valid = { isValid: true }
+        } else {
+            return { isValid: false, title: 'Campo inválido!', message: 'Verifique o campo GRAU DE PARENTESCO.'}
+        }
+
+        //Data
+        if (data.get('data_nasc')) {
+            valid = { isValid: true }
+        } else {
+            return { isValid: false, title: 'Campo inválido!', message: 'Verifique o campo DATA NASCIMENTO.'}
+        }
+
+        //Banco
+        if (data.get('fk_bco') || data.get('agencia') || data.get('conta')) {
+            if (data.get('fk_bco') && data.get('agencia') && data.get('conta')) {
+                valid = { isValid: true }
+            } else {
+                return { isValid: false, title: 'Campo(s) inválido(s)!', message: 'Verifique os dados bancários.'}
+            }
+        }
+
+
+        console.log(valid)
+        //Retorna resultado
+        return valid
+    }
+    
+
     async modelingData(data) {
         //Trata os campos
         return new Promise(async (resolve)=>{
             await asyncForEach(data, async (item)=>{
-                //Pega texto da Operadora
-                let operadora = operadoras.filter(value => {
-                    return value.codigo === item.operadora
-                })
-                item.operadora_nome = operadora[0].nome
-
-                //Pega texto do Inativo
-                let inativo = item.inativo === 'S' ? 'Sim' : 'Não'
-                item.inativo_nome = inativo
+               item.data_nasc_str = garanteDate(item.data_nasc)
+               item.carteira_unimed = item.carteira_unimed_hospitalar || item.carteira_unimed_ambulat || item.carteira_unimed_global || item.carteira_unimed_odonto || ''
             })
             resolve(data)
         })
@@ -209,7 +302,7 @@ class Celulares extends Component {
         }).then((result) => {
             if (result) {
                 //Delete
-                fetch(config.protocol+'://'+config.server+':'+config.portBackend+'/api/deleteCelular?pk='+pk, {
+                fetch(config.protocol+'://'+config.server+':'+config.portBackend+'/api/deleteDependente?pk='+pk, {
                     method: 'POST',
                     headers: {
                         'Content-type': 'application/json'
@@ -222,7 +315,7 @@ class Celulares extends Component {
                             this.componentDidMount()
                         });
                     } else {
-                        swal("Exclusão não realizada", "Registro não foi excluído. Verifique os campos.", "error");
+                        swal("Exclusão não realizada", "Registro não foi excluído.", "error");
                     }
                 })
             }
@@ -232,9 +325,18 @@ class Celulares extends Component {
     submitData(e) {
         e.preventDefault();
         //Pega valores do form
-        const form = document.getElementById('registroCelulares');
+        const form = document.getElementById('registroDependentes');
         const data = new FormData(form);
         const fk = Number(getParameterByName('pk'))
+
+        
+        let validate = this.validateData(data)
+        
+        if (!validate.isValid) {
+            swal(validate.title, validate.message, "error");
+            throw validate
+        }
+        console.log(data.keys())
 
         //Trata valores conforme data-parse dos inputs
         for (let name of data.keys()) {
@@ -249,24 +351,30 @@ class Celulares extends Component {
                     data.set(name, parsedValue);
                 }
             }
+            console.log(name, input.value)
         }
 
+
         //Insere FK
-        data.append('fk_ass', fk)
+        data.append('fk_asstitular', fk)
 
         //Converte FormData em JSON
         var object = {};
         data.forEach(function(value, key){
-            object[key] = value;
+            if (value !== "") {
+                object[key] = value;
+            } else {
+                object[key] = null;
+            }
         });
         var json = JSON.stringify(object);
 
-        console.log(data.get('inativo'))
+
         //Post no server
         if (this.state.edit) {
             //Editar
             console.log(json)
-            fetch(config.protocol+'://'+config.server+':'+config.portBackend+'/api/editCelular?pk='+this.state.codigo, {
+            fetch(config.protocol+'://'+config.server+':'+config.portBackend+'/api/editDependente?pk='+this.state.codigo, {
                 method: 'POST',
                 headers: {
                     'Content-type': 'application/json'
@@ -285,7 +393,7 @@ class Celulares extends Component {
             })
         } else {
             //Inserir
-            fetch(config.protocol+'://'+config.server+':'+config.portBackend+'/api/novoCelular', {
+            fetch(config.protocol+'://'+config.server+':'+config.portBackend+'/api/novoDependente', {
                 method: 'POST',
                 headers: {
                     'Content-type': 'application/json'
@@ -311,6 +419,9 @@ class Celulares extends Component {
     }
 
     render() {
+        let categorias = this.state.combos.map(this.populaCategoria)
+        let graus = this.state.combos.map(this.populaGrau)
+        let bancos = this.state.combos.map(this.populaBanco)
         return (
             <div className="boxSite colorSettings">
                 {/***************** Barra de Navegação *******************/}
@@ -321,7 +432,7 @@ class Celulares extends Component {
                 <div className="boxTela">
                     {/*********************** Header ***********************/}
                     <div className="boxHeader">
-                        <h3 className="headerCadastro">Cadastro de Celulares</h3>
+                        <h3 className="headerCadastro">Cadastro de Dependentes</h3>
                     </div>
                     {/*********************** Campos ***********************/}
                     <div style={{ paddingBottom: '30px'}}>
@@ -330,35 +441,69 @@ class Celulares extends Component {
                                     <div>
                                     <Modal.Header className="ModalBg">   
                                         <div className="ModalHeader">
-                                            <h3 className="headerModal">Registro de Celular</h3>
+                                            <h3 className="headerModal">Registro de Dependente</h3>
                                         </div>
                                     </Modal.Header>
                                     <Modal.Body className="ModalBg" >   
                                         <div className='ModalBody'> 
-                                            <form id="registroCelulares" name="registroCelulares" onSubmit={ this.submitData }>
+                                            <form id="registroDependentes" name="registroDependentes" onSubmit={ this.submitData }>
                                                 <div>
-                                                    <label className="labelModal">Operadora</label>
-                                                    <select data-parse="uppercase" id="operadora" name="operadora" className="form-control"  style={{ width: '100px'}}>
-                                                        <option value="N" >Selecione</option>
-                                                        <option value="C" >Claro</option>
-                                                        <option value="T" >Tim</option>
-                                                        <option value="O" >Oi</option>
-                                                        <option value="V" >Vivo</option>
+                                                    <label className="labelModal">Nome:</label>
+                                                    <input type="text" name="nome" className="form-control" data-parse="uppercase"/>
+                                                </div>
+                                                <div>
+                                                    <label className="labelModal">Categoria de Associado:</label>
+                                                    <select name="fk_cat" id="fk_cat" className="form-control" data-parse="uppercase" style={{ width: '180px' }}>
+                                                        <option value="NNN">Selecione</option>
+                                                        {categorias}
                                                     </select>
                                                 </div>
                                                 <div>
-                                                    <label className="labelModal">Número</label>
-                                                    <input type="text" id="numero" name="numero" className="form-control" maxLength="10" data-parse="number" style={{ width: '140px'}} />
+                                                    <label className="labelModal">Grau de Parentesco:</label>
+                                                    <select name="fk_gra" id="fk_gra" className="form-control" data-parse="uppercase" style={{ width: '150px' }}>
+                                                        <option value="NNN">Selecione</option>
+                                                        {graus}
+                                                    </select>
                                                 </div>
                                                 <div>
-                                                    <label className="labelModal">Observação</label>
-                                                    <textarea type="text" data-parse="uppercase" id="observacao" name="observacao" className="form-control" />
+                                                    <label className="labelModal">Data de Nascimento:</label>
+                                                    <input type="date" name="data_nasc" className="form-control" style={{ width: '150px' }}/>
                                                 </div>
-                                                <label className="labelModal">Inativo</label>
-                                                <select data-parse="uppercase" id="inativo" name="inativo" className="form-control" defaultValue="N" style={{ width: '100px'}}>
-                                                    <option value="N">Não</option>
-                                                    <option value="S">Sim</option>
-                                                </select>
+                                                <div>
+                                                    <label className="labelModal">Banco:</label>
+                                                    <select name="fk_bco" data-parse="uppercase" className="form-control" style={{ width: '200px'}}>
+                                                        <option value="">Selecione</option>
+                                                        {bancos}
+                                                    </select>
+                                                </div>
+                                                <div>
+                                                    <label className="labelModal">Agência:</label>
+                                                    <input type="text" name="agencia" className="form-control" style={{ width: '100px'}} data-parse="uppercase"/>
+                                                </div>
+                                                <div>                                                
+                                                    <label className="labelModal">Conta:</label>
+                                                    <input type="text" name="conta" className="form-control" style={{ width: '130px'}} data-parse="uppercase"/>
+                                                </div>
+                                                <div>
+                                                    <label className="labelModal">Número Carteira Global:</label>
+                                                    <input type="text" id="carteira_unimed_global" name="carteira_unimed_global" className="form-control" maxLength="10"  style={{ width: '180px'}}/>
+                                                </div>
+                                                <div>
+                                                    <label className="labelModal">Número Carteira Ambulatorial:</label>
+                                                    <input type="text" id="carteira_unimed_ambulat" name="carteira_unimed_ambulat" className="form-control" maxLength="10"  style={{ width: '180px'}}/>
+                                                </div>
+                                                <div>
+                                                    <label className="labelModal">Número Carteira Odonto:</label>
+                                                    <input type="text" id="carteira_unimed_hospitalar" name="carteira_unimed_hospitalar" className="form-control" maxLength="10"  style={{ width: '180px'}}/>
+                                                </div>
+                                                <div>
+                                                    <label className="labelModal">Número Carteira Odonto:</label>
+                                                    <input type="text" id="carteira_unimed_odonto" name="carteira_unimed_odonto" className="form-control" maxLength="10"  style={{ width: '180px'}}/>
+                                                </div>
+                                                <div>
+                                                    <label className="labelModal">Observações:</label>
+                                                    <textarea type="text" name="observacoes" className="form-control" data-parse="uppercase"/>
+                                                </div>
                                             </form>
                                         </div>
                                     </Modal.Body>
@@ -375,7 +520,7 @@ class Celulares extends Component {
                             <div style={{ height:'auto', marginBottom: '10px' }}>
                                 <p style={{ fontSize: '1.2em' }}>Associado: <font style={{ fontSize: '1.2em',  fontWeight: 'bold'}}>{this.state.associado.nome}</font></p>
                             </div>
-                            {/* <LinkContainer to={"/associados/celulares/registro?pk="+this.state.associado.pk_ass}> */}
+                            {/* <LinkContainer to={"/associados/dependentes/registro?pk="+this.state.associado.pk_ass}> */}
                                 <button className="buttonNovo" style={{ marginLeft: '0' }} onClick={this.showModal}><Icon size={20} style={{ display: "inline" }} icon={ic_add_circle}></Icon>Novo Registro</button>
                             {/* </LinkContainer>  */}
                             <br/>
@@ -392,41 +537,45 @@ class Celulares extends Component {
                                     columns={[
                                         {
                                             Header: "Código",
-                                            accessor: "pk_ace",
-                                            show: false
+                                            accessor: "pk_ass",
+                                            minWidth: 50
                                         }, 
                                         {
-                                            Header: "Número",
-                                            accessor: "numero",
+                                            Header: "Nome",
+                                            accessor: "nome",
                                             minWidth: 400
                                         },
                                         {
-                                            Header: "Operadora",
-                                            accessor: "operadora_nome",
-                                            minWidth: 200
+                                            Header: "Grau de Parentesco",
+                                            accessor: "nomegra",
+                                            minWidth: 100
                                         },
                                         {
-                                            Header: "Inativo",
-                                            // accessor: "inativo_str",
-                                            minWidth: 50,
-                                            Cell: row => { 
-                                                return (
-                                                    <div style={{ color: row.original.inativo==='S' ? 'red' : 'var(--table-font)'}}>
-                                                        {row.original.inativo_nome}
-                                                    </div>
-                                            )}
+                                            Header: "Dt Nasc",
+                                            accessor: "data_nasc_str",
+                                            minWidth: 100,
+                                        },
+                                        {
+                                            Header: "Carteira Unimed",
+                                            accessor: "carteira_unimed",
+                                            minWidth: 120,
+                                        },
+                                        {
+                                            Header: "Categoria Associado",
+                                            accessor: "nomecat",
+                                            minWidth: 150,
                                         },
                                         {
                                             Header: "Opções",
-                                            minWidth: 300,
-                                            maxWidth: 300,
+                                            minWidth: 200,
+                                            maxWidth: 200,
                                             Cell: row => { return (
                                                 <div className="buttonsDetailColumn">
-                                                    <button className="buttonDetailColumn" onClick={(e)=>{this.showModal(e, row.row.pk_ace)}}>
+                                                    <button className="buttonDetailColumn" onClick={(e)=>{this.showModal(e, row.row.pk_ass)}}>
                                                         <Icon size={20} icon={edit}></Icon>
                                                         Editar
                                                     </button>
-                                                    <button className="buttonDetailColumn" onClick={(e)=>{this.handleDelete(e, row.row.pk_ace)}}>
+                                                    <button className="buttonDetailColumn" onClick={(e)=>{this.handleDelete(e, row.row.pk_ass)}}>
                                                         <Icon size={20} icon={iosTrash}></Icon>
                                                         Excluir
                                                     </button>
@@ -455,4 +604,4 @@ class Celulares extends Component {
     }
 }
 
-export default Celulares;
+export default Dependentes;
