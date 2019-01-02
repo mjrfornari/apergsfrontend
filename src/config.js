@@ -18,7 +18,7 @@ export const config = {
     protocol: window.location.hostname.includes('herokuapp') ? 'https' :'http',
     server : window.location.hostname.includes('herokuapp') ? 'delphusback.herokuapp.com' : window.location.hostname,
     port: 3000,
-    portBackend: 3001,
+    portBackend: window.location.hostname.includes('herokuapp') ? 443 : 3001,
     frontend: 'http://localhost.com:3000'
 }
 
